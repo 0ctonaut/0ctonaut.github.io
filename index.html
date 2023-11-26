@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"0ctonaut.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"0ctonaut.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
@@ -181,10 +181,6 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
   <div class="reading-progress-bar"></div>
   <a role="button" class="book-mark-link book-mark-link-fixed"></a>
 
@@ -200,10 +196,76 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://0ctonaut.github.io/posts/49f26ea.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gagarin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yesterday">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/posts/49f26ea.html" class="post-title-link" itemprop="url">SSH入门</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-11-26 20:13:43 / Modified: 12:19:08" itemprop="dateCreated datePublished" datetime="2023-11-26T20:13:43Z">2023-11-26</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>ssh入门笔记</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/49f26ea.html">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://0ctonaut.github.io/posts/b5f422e3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.jpg">
       <meta itemprop="name" content="Gagarin">
       <meta itemprop="description" content="">
     </span>
@@ -231,7 +293,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-11-19 01:06:14" itemprop="dateModified" datetime="2023-11-19T01:06:14Z">2023-11-19</time>
+                <time title="Modified: 2023-11-26 12:18:54" itemprop="dateModified" datetime="2023-11-26T12:18:54Z">2023-11-26</time>
               </span>
 
           
@@ -245,20 +307,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="搭建历程"><a href="#搭建历程" class="headerlink" title="搭建历程"></a>搭建历程</h1><h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/rozbo/hexo-abbrlink">文章url优化</a></li>
-</ul>
-<hr>
-<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>111—&#x3D;&#x3D;&#x3D;|||<br>烫烫烫<br>ййццззжд</p>
-<hr>
-<h3 id="title3"><a href="#title3" class="headerlink" title="title3"></a>title3</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Hello&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">mian</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">114514</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="title4"><a href="#title4" class="headerlink" title="title4"></a>title4</h4><p><strong>inline</strong></p>
-<p>测试下划线和乘号 $f(x)&#x3D;x_1<em>x_2</em>x_3$</p>
-<p><em>single line</em><br>$$E \neq m^c^2$$</p>
-<p><del>multi line</del><br>$$<br>\begin{cases}<br>a_0 &#x3D; f(x_0) \<br>a_1 &#x3D; \frac{f(x_1)-a_0}{x_1-x_0} &#x3D; \frac{f(x_1)-f(x_0)}{x_1-x_0} \<br>a_2 &#x3D; \frac{f(x_2) - a_0 - a_1(x_2-x_0)}{(x_2-x_0)(x_2-x_1)} &#x3D; \frac{\frac{f(x_2) - f(x_0)}{x_2-x_0} - \frac{f(x_1)-f(x_0)}{x_1-x_0}}{x_2-x_1}\<br>a_3 &#x3D; \frac{f(x_3) - a_0 - a_1(x_3-x_0) - a_2(x_3-x_0)(x_3-x_1)}{(x_3 - x_0)(x_3-x_1)(x_3-x_2)} &#x3D; \frac{\frac{\frac{f(x_3) - f(x_0)}{x_3-x_0} - \frac{f(x_1)-f(x_0)}{x_1-x_0}}{x_3-x_1} - \frac{\frac{f(x_2) - f(x_0)}{x_2-x_0} - \frac{f(x_1)-f(x_0)}{x_1-x_0}}{x_2-x_1}}{x_3-x_2} \<br>\vdots<br>\end{cases}<br>$$</p>
-<p>目前似乎还不支持使用<code>\\</code>来渲染多行公式，得用三根反斜线<code>\\\</code>，逆天</p>
-
+          <p>博客搭建历程</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/posts/b5f422e3.html">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -331,6 +388,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gagarin"
+      src="/images/avatar.jpg">
   <p class="site-author-name" itemprop="name">Gagarin</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -339,9 +398,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">posts</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
       </div>
   </nav>
 </div>
@@ -349,6 +412,10 @@
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>

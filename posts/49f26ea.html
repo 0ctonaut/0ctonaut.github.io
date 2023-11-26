@@ -20,19 +20,20 @@
     var CONFIG = {"hostname":"0ctonaut.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Governments of the Industrial World, you weary giants of flesh and steel, I come from Cyberspace, the new home of Mind. On behalf of the future, I ask you of the past to leave us alone. You are not we">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://0ctonaut.github.io/about/index.html">
+  <meta name="description" content="ssh入门笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSH入门">
+<meta property="og:url" content="https://0ctonaut.github.io/posts/49f26ea.html">
 <meta property="og:site_name" content="Yesterday">
-<meta property="og:description" content="Governments of the Industrial World, you weary giants of flesh and steel, I come from Cyberspace, the new home of Mind. On behalf of the future, I ask you of the past to leave us alone. You are not we">
+<meta property="og:description" content="ssh入门笔记">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-11-18T17:46:42.000Z">
-<meta property="article:modified_time" content="2023-11-18T10:06:49.933Z">
+<meta property="article:published_time" content="2023-11-26T20:13:43.000Z">
+<meta property="article:modified_time" content="2023-11-26T12:19:08.166Z">
 <meta property="article:author" content="Gagarin">
+<meta property="article:tag" content="ssh">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://0ctonaut.github.io/about/">
+<link rel="canonical" href="https://0ctonaut.github.io/posts/49f26ea.html">
 
 
 <script id="page-configurations">
@@ -40,13 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>about | Yesterday
-</title>
+  <title>SSH入门 | Yesterday</title>
   
 
 
@@ -194,62 +194,130 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="en">
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://0ctonaut.github.io/posts/49f26ea.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gagarin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yesterday">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SSH入门
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">about
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
 
-<div class="post-meta">
+              <time title="Created: 2023-11-26 20:13:43 / Modified: 12:19:08" itemprop="dateCreated datePublished" datetime="2023-11-26T20:13:43Z">2023-11-26</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">ssh入门笔记</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="如何使用ssh连接两台windows机器"><a href="#如何使用ssh连接两台windows机器" class="headerlink" title="如何使用ssh连接两台windows机器"></a>如何使用ssh连接两台windows机器</h1><p>假设机器A需要ssh连接机器B</p>
+<ol>
+<li>A和B均需安装OpenSSH，见<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows-server/administration/openssh/openssh_install_firstuse?tabs=powershell">Windows安装OpenSSH</a></li>
+<li>服务端获取用户名 <code>echo %username%</code></li>
+<li>服务端开启 <code>sshd</code> 服务 <code>net start sshd</code> 或者 <code>Start-Service sshd</code><ul>
+<li><code>net start sshd</code> 和 <code>Start-Service sshd</code> 都是用来启动 OpenSSH 服务器的命令，但是它们有一些区别。前者是一个 Windows 命令行工具，它可以在 cmd 或 PowerShell 中使用，但是需要管理员权限。后者是一个 PowerShell 命令，它只能在 PowerShell 中使用，也需要管理员权限。二者的效果是一样的，都会启动 sshd 服务，但是后者可以提供更多的参数和选项</li>
+</ul>
+</li>
+<li><p>服务端查询ip地址 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">局域网</span></span><br><span class="line">ipconfig /all</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">公网</span></span><br><span class="line">curl ipinfo.io</span><br><span class="line">curl cip.cc</span><br><span class="line">curl ifconfig.me</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端连接服务端，密码为 microsoft 密码，而不是开机pin</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@ip</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h1 id="实现免密连接"><a href="#实现免密连接" class="headerlink" title="实现免密连接"></a>实现免密连接</h1><p>假设机器A需要免密连接机器B</p>
+<ol>
+<li><p>机器A生成密钥，这里我们使用 <code>rsa</code> 密钥</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+<p>文件名随意，假设你命名为 <code>id_xxx</code>，建议放在 <code>$env:USERPROFILE\.ssh</code> 下</p>
+</li>
+<li><p>将机器A的 <code>id_xxx.pub</code> 的内容以任意方式追加在机器B的 <code>$env:USERPROFILE\.ssh、authorized_keys</code> 末尾（如果没有这个文件就手动创建）</p>
+</li>
+<li>修改 <code>C:\ProgramData\ssh\sshd_config</code>，检查以下内容<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 不应该被注释</span><br><span class="line">PubkeyAuthentication yes</span><br><span class="line">AuthorizedKeysFile  .ssh/authorized_keys</span><br><span class="line">PasswordAuthentication yes</span><br><span class="line"></span><br><span class="line"># 需要被注释</span><br><span class="line">Match Group administrators</span><br><span class="line">        AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>每次修改完这个文件后应该在终端重启 <code>sshd</code> 服务：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Restart-Service sshd</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>机器A连接机器B，默认使用的私钥是<code>id_rsa</code>，可以使用 <code>-i</code> 来指定具体私钥<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i /your_path/id_xxx username@ip</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/111812831">多台Windows之间的SSH免密登录</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/b5f422e3.html" rel="prev" title="Test">
+      <i class="fa fa-chevron-left"></i> Test
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-          <p>Governments of the Industrial World, you weary giants of flesh and steel, I come from Cyberspace, the new home of Mind. On behalf of the future, I ask you of the past to leave us alone. You are not welcome among us. You have no sovereignty where we gather.</p>
-<p>We have no elected government, nor are we likely to have one, so I address you with no greater authority than that with which liberty itself always speaks. I declare the global social space we are building to be naturally independent of the tyrannies you seek to impose on us. You have no moral right to rule us nor do you possess any methods of enforcement we have true reason to fear.</p>
-<p>Governments derive their just powers from the consent of the governed. You have neither solicited nor received ours. We did not invite you. You do not know us, nor do you know our world. Cyberspace does not lie within your borders. Do not think that you can build it, as though it were a public construction project. You cannot. It is an act of nature and it grows itself through our collective actions.</p>
-<p>You have not engaged in our great and gathering conversation, nor did you create the wealth of our marketplaces. You do not know our culture, our ethics, or the unwritten codes that already provide our society more order than could be obtained by any of your impositions.</p>
-<p>You claim there are problems among us that you need to solve. You use this claim as an excuse to invade our precincts. Many of these problems don’t exist. Where there are real conflicts, where there are wrongs, we will identify them and address them by our means. We are forming our own Social Contract . This governance will arise according to the conditions of our world, not yours. Our world is different.</p>
-<p>Cyberspace consists of transactions, relationships, and thought itself, arrayed like a standing wave in the web of our communications. Ours is a world that is both everywhere and nowhere, but it is not where bodies live.</p>
-<p>We are creating a world that all may enter without privilege or prejudice accorded by race, economic power, military force, or station of birth.</p>
-<p>We are creating a world where anyone, anywhere may express his or her beliefs, no matter how singular, without fear of being coerced into silence or conformity.</p>
-<p>Your legal concepts of property, expression, identity, movement, and context do not apply to us. They are all based on matter, and there is no matter here.</p>
-<p>Our identities have no bodies, so, unlike you, we cannot obtain order by physical coercion. We believe that from ethics, enlightened self-interest, and the commonweal, our governance will emerge . Our identities may be distributed across many of your jurisdictions. The only law that all our constituent cultures would generally recognize is the Golden Rule. We hope we will be able to build our particular solutions on that basis. But we cannot accept the solutions you are attempting to impose.</p>
-<p>In the United States, you have today created a law, the Telecommunications Reform Act, which repudiates your own Constitution and insults the dreams of Jefferson, Washington, Mill, Madison, DeToqueville, and Brandeis. These dreams must now be born anew in us.</p>
-<p>You are terrified of your own children, since they are natives in a world where you will always be immigrants. Because you fear them, you entrust your bureaucracies with the parental responsibilities you are too cowardly to confront yourselves. In our world, all the sentiments and expressions of humanity, from the debasing to the angelic, are parts of a seamless whole, the global conversation of bits. We cannot separate the air that chokes from the air upon which wings beat.</p>
-<p>In China, Germany, France, Russia, Singapore, Italy and the United States, you are trying to ward off the virus of liberty by erecting guard posts at the frontiers of Cyberspace. These may keep out the contagion for a small time, but they will not work in a world that will soon be blanketed in bit-bearing media.</p>
-<p>Your increasingly obsolete information industries would perpetuate themselves by proposing laws, in America and elsewhere, that claim to own speech itself throughout the world. These laws would declare ideas to be another industrial product, no more noble than pig iron. In our world, whatever the human mind may create can be reproduced and distributed infinitely at no cost. The global conveyance of thought no longer requires your factories to accomplish.</p>
-<p>These increasingly hostile and colonial measures place us in the same position as those previous lovers of freedom and self-determination who had to reject the authorities of distant, uninformed powers. We must declare our virtual selves immune to your sovereignty, even as we continue to consent to your rule over our bodies. We will spread ourselves across the Planet so that no one can arrest our thoughts.</p>
-<p>We will create a civilization of the Mind in Cyberspace. May it be more humane and fair than the world your governments have made before.</p>
-<p>By John Perry Barlow</p>
-<p>Davos, Switzerland</p>
-<p>February 8, 1996</p>
-
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
 
 
           </div>
@@ -301,6 +369,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8ssh%E8%BF%9E%E6%8E%A5%E4%B8%A4%E5%8F%B0windows%E6%9C%BA%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">如何使用ssh连接两台windows机器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%85%8D%E5%AF%86%E8%BF%9E%E6%8E%A5"><span class="nav-number">2.</span> <span class="nav-text">实现免密连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">2.1.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -483,7 +552,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'hexo_blog_comment_repo',
       owner       : '0ctonaut',
       admin       : ['0ctonaut'],
-      id          : '3be7aa98d992907175cbd79c194399f2',
+      id          : '21cf845c5a5235be565f350df92b9bb4',
         language: 'zh-CN',
       distractionFreeMode: true
     });
