@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="Yesterday">
 <meta property="og:description" content="自用c++的nuget包制作方法">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://0ctonaut.github.io/posts/coapp.png">
 <meta property="article:published_time" content="2023-12-06T09:55:54.000Z">
-<meta property="article:modified_time" content="2023-12-06T01:58:06.424Z">
+<meta property="article:modified_time" content="2023-12-28T02:55:49.715Z">
 <meta property="article:author" content="Gagarin">
 <meta property="article:tag" content="vs">
 <meta property="article:tag" content="nuget">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://0ctonaut.github.io/posts/coapp.png">
 
 <link rel="canonical" href="https://0ctonaut.github.io/posts/85cb132b.html">
 
@@ -210,10 +212,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-12-06 09:55:54 / Modified: 01:58:06" itemprop="dateCreated datePublished" datetime="2023-12-06T09:55:54Z">2023-12-06</time>
+              <time title="Created: 2023-12-06 09:55:54" itemprop="dateCreated datePublished" datetime="2023-12-06T09:55:54Z">2023-12-06</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-12-28 02:55:49" itemprop="dateModified" datetime="2023-12-28T02:55:49Z">2023-12-28</time>
+              </span>
 
           
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -234,7 +242,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文环境：</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="coapp.png" alt="Alt text"></p>
+<blockquote>
+<p>nuget挺难用的</p>
+</blockquote>
+<p>本文环境：</p>
 <ul>
 <li>Win11</li>
 <li>Visual Studio 2019</li>
@@ -244,15 +256,14 @@
 <p>如有更好的方法欢迎留言，持续更新</p>
 <hr>
 <h1 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h1><ul>
+<li>安装 <code>CoApp</code> 与 <code>Nuget Package Explorer</code></li>
 <li><code>cmake</code> 配置 <code>vtk</code> 的Visual Studio工程</li>
 <li>build <code>ALL_BUILD</code></li>
 <li>build <code>INSTALL</code>，默认输出到 <code>C:\Program Files (x86)\VTK</code></li>
 <li>进入 <code>INSTALL</code> 的输出目录，如 <code>C:\Program Files (x86)\VTK</code></li>
-<li><p>创建以下 <code>xxx.autopkg</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">nuget </span><br><span class="line">&#123;</span><br><span class="line">    nuspec </span><br><span class="line">    &#123;</span><br><span class="line">        id = VTK;</span><br><span class="line">        version : 9.1.0; </span><br><span class="line">        title: VTK;</span><br><span class="line">        releaseNotes: &quot;Release of VTK 9.1.0 libraries.&quot;; </span><br><span class="line">        copyright: Copyright 2023; </span><br><span class="line">        tags: &#123; VTK, native, C++ &#125;; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    files </span><br><span class="line">    &#123; </span><br><span class="line">        include: &#123; .\include\**\* &#125;;</span><br><span class="line"></span><br><span class="line">        [x64,debug] &#123; </span><br><span class="line">            lib: &#123; .\lib\*d.lib &#125;; </span><br><span class="line">            bin: &#123; .\bin\*d.* &#125;; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        [x64,release] &#123; </span><br><span class="line">            lib: &#123; .\lib\*1.lib &#125;; </span><br><span class="line">            bin: &#123; .\bin\*1.dll &#125;; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在终端运行 <code>write-nugetpackage xxx.autopkg</code></p>
-</li>
+<li>创建以下 <code>xxx.autopkg</code><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">nuget </span><br><span class="line">&#123;</span><br><span class="line">    nuspec </span><br><span class="line">    &#123;</span><br><span class="line">        id = VTK;</span><br><span class="line">        version : 9.1.0; </span><br><span class="line">        title: VTK;</span><br><span class="line">        releaseNotes: &quot;Release of VTK 9.1.0 libraries.&quot;; </span><br><span class="line">        copyright: Copyright 2023; </span><br><span class="line">        tags: &#123; VTK, native, C++ &#125;; </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    files </span><br><span class="line">    &#123; </span><br><span class="line">        include: &#123; .\include\**\* &#125;;</span><br><span class="line"></span><br><span class="line">        [x64,debug] &#123; </span><br><span class="line">            lib: &#123; .\lib\*d.lib &#125;; </span><br><span class="line">            bin: &#123; .\bin\*d.* &#125;; </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        [x64,release] &#123; </span><br><span class="line">            lib: &#123; .\lib\*1.lib &#125;; </span><br><span class="line">            bin: &#123; .\bin\*1.dll &#125;; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>若为首次操作，则先以管理员身份运行powershell，执行命令<code>get-executionpolicy</code>，如果输出为<code>Restricted</code>，则再次执行命令`set-executionpolicy remotesigned``</li>
+<li>在终端运行 <code>write-nugetpackage xxx.autopkg</code></li>
 <li>执行完毕后，该目录会新增这三个文件，我们只需要前两个，分别将其解压，进入目录，并只保留build文件夹，再将<code>.nupkg</code>压缩包放进目录<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[id].[version].nupkg</span><br><span class="line">[id].redist.[version].nupkg</span><br><span class="line">[id].symbols.[version].nupkg</span><br></pre></td></tr></table></figure></li>
 <li>最终你的两个文件夹目录如下，可直接作为nuget包使用<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- [id].redist.[version]/</span><br><span class="line">	- build/</span><br><span class="line">	- [id].[version].nupkg</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- [id].symbols.[version]</span><br><span class="line">	- build/</span><br><span class="line">	- [id].redist.[version].nupkg</span><br></pre></td></tr></table></figure>
 </li>
@@ -284,7 +295,10 @@
     <a href="/posts/49f26ea.html" rel="prev" title="SSH入门">
       <i class="fa fa-chevron-left"></i> SSH入门
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/posts/d30c71ec.html" rel="next" title="运行时库">
+      运行时库 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -360,14 +374,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
