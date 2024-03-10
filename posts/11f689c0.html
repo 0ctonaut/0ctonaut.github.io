@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"0ctonaut.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="含有指针的自定义类和std::vector重新分配内存带来的小思考">
+<meta property="og:type" content="article">
+<meta property="og:title" content="含有指针的自定义类踩坑">
+<meta property="og:url" content="https://0ctonaut.github.io/posts/11f689c0.html">
+<meta property="og:site_name" content="Yesterday">
+<meta property="og:description" content="含有指针的自定义类和std::vector重新分配内存带来的小思考">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-10T09:20:53.000Z">
+<meta property="article:modified_time" content="2024-03-10T05:42:35.736Z">
+<meta property="article:author" content="Gagarin">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://0ctonaut.github.io/posts/11f689c0.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>含有指针的自定义类踩坑 | Yesterday</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yesterday</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://0ctonaut.github.io/posts/11f689c0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gagarin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yesterday">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          含有指针的自定义类踩坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-03-10 09:20:53 / Modified: 05:42:35" itemprop="dateCreated datePublished" datetime="2024-03-10T09:20:53Z">2024-03-10</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">含有指针的自定义类和std::vector重新分配内存带来的小思考</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我有一个存储信息的类<code>CInfo</code>，和<code>CInfoArray</code>类来存储一定数量的<code>CInfo</code>结构如下:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CInfo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    IPtr* m_pBase;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//******************************************</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CInfoArray</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;CInfo&gt; m_InfoArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于逻辑上我需要将<code>CInfo</code>的成员指针指向<code>IPtr</code>的子类比如<code>CPtr1,CPtr2...</code>，并且我想实现只让<code>CInfo</code>类本身来管理自己指针<code>m_pBase</code>的创建和销毁</p>
+<p>为了方便描述，其中<code>IPtr,CPtr1,CPtr2...</code>仅实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;im IPtr/CPtr1/CPtr2&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么我是这样实现的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CInfo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">CInfo</span>(std::function&lt;IPtr*()&gt; vFunc)</span><br><span class="line">        : <span class="built_in">m_pBase</span>(<span class="literal">nullptr</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        m_pBase = <span class="built_in">vFunc</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    ~<span class="built_in">CInfo</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(m_pBase)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">delete</span> m_pBase;</span><br><span class="line">            m_pBase = <span class="literal">nullptr</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    IPtr* m_pBase;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//******************************************</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CInfoArray</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">registerInfo</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        m_InfoArray.<span class="built_in">emplace_back</span>([] &#123; <span class="keyword">return</span> <span class="keyword">new</span> T; &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnPrint</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; info : m_InfoArray)</span><br><span class="line">        &#123;</span><br><span class="line">            info.m_pBase-&gt;<span class="built_in">print</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;CInfo&gt; m_InfoArray;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>当我在<code>main</code>函数里这样做：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    CInfoArray Array;</span><br><span class="line">    Array.<span class="built_in">registerInfo</span>&lt;IPtr&gt;();</span><br><span class="line">    Array.<span class="built_in">OnPrint</span>(); </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 成功打印</span></span><br><span class="line"><span class="comment">// im IPtr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//***************************************</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    CInfoArray Array;</span><br><span class="line">    Array.<span class="built_in">registerInfo</span>&lt;IPtr&gt;();</span><br><span class="line">    Array.<span class="built_in">registerInfo</span>&lt;IPtr&gt;();</span><br><span class="line">    Array.<span class="built_in">OnPrint</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 CInfoArray::OnPrint() 异常中断</span></span><br></pre></td></tr></table></figure>
+<p>这究竟是为什么，让我们来一探究竟</p>
+<p>环境：</p>
+<ul>
+<li>win11</li>
+<li>vs2022</li>
+<li>Debug x64</li>
+</ul>
+<hr>
+<h1 id="单步调试"><a href="#单步调试" class="headerlink" title="单步调试"></a>单步调试</h1><p>具体报错的那行是<code>info.m_pBase-&gt;print();</code></p>
+<p>开始单步调试，初步观察到：</p>
+<ul>
+<li>第二次<code>registerInfo</code>进入了<code>CInfo</code>析构函数</li>
+<li>使用计数器后发现<code>CInfo</code>的构造函数和析构函数只被分别调用了一次</li>
+<li><code>registerInfo</code>被调用两次后，<code>m_InfoArray</code>的大小为2</li>
+<li>引发异常的语句<code>info.m_pBase-&gt;print();</code>，<code>m_pBase</code>的地址不是<code>nullptr</code>(<code>CInfo</code>的构造函数和析构函数都有将<code>m_pBase</code>赋值为<code>nullptr</code>)</li>
+</ul>
+<p>那么可以发现，整个过程中一共出现了三个<code>CInfo</code>实例，其中有一个神奇的第三者还释放了另外二者之一所维持的内存空间，也就是说这个第三者是没有自己的内存空间的，没有执行构造函数在堆上分配内存的步骤</p>
+<p>呼之欲出，出现了<strong>拷贝</strong></p>
+<hr>
+<h1 id="vector重新分配内存的锅"><a href="#vector重新分配内存的锅" class="headerlink" title="vector重新分配内存的锅"></a>vector重新分配内存的锅</h1><p>查阅了一点资料，就大小而言，<code>std::vector</code>有 <code>size</code>和<code>capacity</code>两个值</p>
+<blockquote>
+<p>.size() is the number of elements that are contained in the vector, whereas .capacity() is the number of elements that can be added to the vector, before memory will be re-allocated.</p>
+</blockquote>
+<p>(警觉) RE-ALLOCATED，那么说得通了，感觉应该是分配了新的空间，然后调用默认拷贝函数直接把<code>CInfo</code>拷贝过去了</p>
+<p>实践一下，我们把<code>OnPrint()</code>和析构函数的<code>delete</code>注释掉，只运行10次<code>registerInfo&lt;&gt;</code></p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">Initial Size:   0, Capacity:    1</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A89325B50</span><br><span class="line">Size:   1, Capacity:    1</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A89325658</span><br><span class="line">Destructor of CInfo,     address: 0000019A89325B50</span><br><span class="line">Size:   2, Capacity:    2</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A893248A0</span><br><span class="line">Destructor of CInfo,     address: 0000019A89325650</span><br><span class="line">Destructor of CInfo,     address: 0000019A89325658</span><br><span class="line">Size:   3, Capacity:    3</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A893245A8</span><br><span class="line">Destructor of CInfo,     address: 0000019A89324890</span><br><span class="line">Destructor of CInfo,     address: 0000019A89324898</span><br><span class="line">Destructor of CInfo,     address: 0000019A893248A0</span><br><span class="line">Size:   4, Capacity:    4</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A89320C90</span><br><span class="line">Destructor of CInfo,     address: 0000019A89324590</span><br><span class="line">Destructor of CInfo,     address: 0000019A89324598</span><br><span class="line">Destructor of CInfo,     address: 0000019A893245A0</span><br><span class="line">Destructor of CInfo,     address: 0000019A893245A8</span><br><span class="line">Size:   5, Capacity:    6</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A89320C98</span><br><span class="line">Size:   6, Capacity:    6</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A893190B0</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C70</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C78</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C80</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C88</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C90</span><br><span class="line">Destructor of CInfo,     address: 0000019A89320C98</span><br><span class="line">Size:   7, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A893190B8</span><br><span class="line">Size:   8, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A893190C0</span><br><span class="line">Size:   9, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,    address: 0000019A8931B098</span><br><span class="line">Destructor of CInfo,     address: 0000019A89319080</span><br><span class="line">Destructor of CInfo,     address: 0000019A89319088</span><br><span class="line">Destructor of CInfo,     address: 0000019A89319090</span><br><span class="line">Destructor of CInfo,     address: 0000019A89319098</span><br><span class="line">Destructor of CInfo,     address: 0000019A893190A0</span><br><span class="line">Destructor of CInfo,     address: 0000019A893190A8</span><br><span class="line">Destructor of CInfo,     address: 0000019A893190B0</span><br><span class="line">Destructor of CInfo,     address: 0000019A893190B8</span><br><span class="line">Destructor of CInfo,     address: 0000019A893190C0</span><br><span class="line">Size:   10, Capacity:   13</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B050</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B058</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B060</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B068</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B070</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B078</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B080</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B088</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B090</span><br><span class="line">Destructor of CInfo,     address: 0000019A8931B098</span><br></pre></td></tr></table></figure>
+<p>行，可以看到，每次re-allocation发生，也就是capacity改变，原地址对象都会被析构</p>
+<p>我们再实现拷贝构造函数看看（什么也不干，只实现打印信息）</p>
+<blockquote>
+<p>The copy constructor is called whenever an object is initialized (by direct-initialization or copy-initialization) from another object of the same type</p>
+</blockquote>
+<p>也就是说拷贝构造函数在创建新对象的过程中执行，它是在新对象的上下文中执行的。其目的是使用另一个已存在的对象（即被拷贝的对象）的状态来初始化新创建的对象</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">Initial Size:   0, Capacity:    1</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F5BA0</span><br><span class="line">Size:   1, Capacity:    1</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F5798</span><br><span class="line">Copy             00000208F99F5BA0 =&gt; 00000208F99F5790</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F5BA0</span><br><span class="line">Size:   2, Capacity:    2</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F42A0</span><br><span class="line">Copy             00000208F99F5790 =&gt; 00000208F99F4290</span><br><span class="line">Copy             00000208F99F5798 =&gt; 00000208F99F4298</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F5790</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F5798</span><br><span class="line">Size:   3, Capacity:    3</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F4488</span><br><span class="line">Copy             00000208F99F4290 =&gt; 00000208F99F4470</span><br><span class="line">Copy             00000208F99F4298 =&gt; 00000208F99F4478</span><br><span class="line">Copy             00000208F99F42A0 =&gt; 00000208F99F4480</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4290</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4298</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F42A0</span><br><span class="line">Size:   4, Capacity:    4</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F08A0</span><br><span class="line">Copy             00000208F99F4470 =&gt; 00000208F99F0880</span><br><span class="line">Copy             00000208F99F4478 =&gt; 00000208F99F0888</span><br><span class="line">Copy             00000208F99F4480 =&gt; 00000208F99F0890</span><br><span class="line">Copy             00000208F99F4488 =&gt; 00000208F99F0898</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4470</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4478</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4480</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F4488</span><br><span class="line">Size:   5, Capacity:    6</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99F08A8</span><br><span class="line">Size:   6, Capacity:    6</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99E90B0</span><br><span class="line">Copy             00000208F99F0880 =&gt; 00000208F99E9080</span><br><span class="line">Copy             00000208F99F0888 =&gt; 00000208F99E9088</span><br><span class="line">Copy             00000208F99F0890 =&gt; 00000208F99E9090</span><br><span class="line">Copy             00000208F99F0898 =&gt; 00000208F99E9098</span><br><span class="line">Copy             00000208F99F08A0 =&gt; 00000208F99E90A0</span><br><span class="line">Copy             00000208F99F08A8 =&gt; 00000208F99E90A8</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F0880</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F0888</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F0890</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F0898</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F08A0</span><br><span class="line">Destructor of CInfo,             address: 00000208F99F08A8</span><br><span class="line">Size:   7, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99E90B8</span><br><span class="line">Size:   8, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99E90C0</span><br><span class="line">Size:   9, Capacity:    9</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Constructor of CInfo,            address: 00000208F99EB098</span><br><span class="line">Copy             00000208F99E9080 =&gt; 00000208F99EB050</span><br><span class="line">Copy             00000208F99E9088 =&gt; 00000208F99EB058</span><br><span class="line">Copy             00000208F99E9090 =&gt; 00000208F99EB060</span><br><span class="line">Copy             00000208F99E9098 =&gt; 00000208F99EB068</span><br><span class="line">Copy             00000208F99E90A0 =&gt; 00000208F99EB070</span><br><span class="line">Copy             00000208F99E90A8 =&gt; 00000208F99EB078</span><br><span class="line">Copy             00000208F99E90B0 =&gt; 00000208F99EB080</span><br><span class="line">Copy             00000208F99E90B8 =&gt; 00000208F99EB088</span><br><span class="line">Copy             00000208F99E90C0 =&gt; 00000208F99EB090</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E9080</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E9088</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E9090</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E9098</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E90A0</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E90A8</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E90B0</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E90B8</span><br><span class="line">Destructor of CInfo,             address: 00000208F99E90C0</span><br><span class="line">Size:   10, Capacity:   13</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB050</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB058</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB060</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB068</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB070</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB078</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB080</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB088</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB090</span><br><span class="line">Destructor of CInfo,             address: 00000208F99EB098</span><br></pre></td></tr></table></figure>
+<p>环境为x64，所以指针大小为8字节，由于<code>CInfo</code>类只有一个指针成员，所以一个<code>CInfo</code>实例占8字节</p>
+<p>从上面的打印信息可以看出</p>
+<ul>
+<li>向capacity已满的<code>std::vector</code>插入元素，顺序为构造元素=&gt;分配新内存=&gt;拷贝=&gt;析构旧内存的元素</li>
+</ul>
+<hr>
+<h1 id="拷贝-移动"><a href="#拷贝-移动" class="headerlink" title="拷贝/移动"></a>拷贝/移动</h1><p><code>std::vector</code>的定义为<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">T</span>,</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Allocator</span> = std::allocator&lt;T&gt;</span><br><span class="line">&gt; <span class="keyword">class</span> vector;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>T must meet the requirements of <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/named_req/CopyAssignable">CopyAssignable</a> and <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/named_req/CopyConstructible">CopyConstructible</a>.</p>
+</blockquote>
+<p>也就是说<code>std::vector</code>所容纳的元素必须含有可用的拷贝/移动构造函数</p>
+<h2 id="默认拷贝-移动构造函数"><a href="#默认拷贝-移动构造函数" class="headerlink" title="默认拷贝/移动构造函数"></a>默认拷贝/移动构造函数</h2><p>C++为类自动生成默认的拷贝构造函数和移动构造函数，如果你没有显式地为类提供这些。它们的行为和区别基于类的成员如何被拷贝或移动。</p>
+<h3 id="默认拷贝构造函数"><a href="#默认拷贝构造函数" class="headerlink" title="默认拷贝构造函数"></a>默认拷贝构造函数</h3><p>如果没有为类<strong>显式定义拷贝构造函数</strong>，编译器会生成一个默认拷贝构造函数。默认拷贝构造函数会逐个拷贝类的每个非静态成员。对于基本类型成员，这意味着简单的值复制。对于类类型成员，如果成员类定义了拷贝构造函数，这个函数将被调用；否则，会递归进行成员的成员的默认拷贝构造。</p>
+<ul>
+<li>对基本数据类型成员，执行位拷贝。</li>
+<li>对类类型成员，调用其拷贝构造函数。</li>
+<li>对数组类型成员，逐个拷贝数组中的元素。</li>
+<li>对指针成员，拷贝指针值（地址），不拷贝指针指向的数据（浅拷贝）。</li>
+</ul>
+<h3 id="默认移动构造函数"><a href="#默认移动构造函数" class="headerlink" title="默认移动构造函数"></a>默认移动构造函数</h3><p>如果没有为类显式定义<strong>移动构造函数（以及拷贝构造函数、拷贝赋值操作符和析构函数）</strong>，编译器会生成一个默认的移动构造函数。默认移动构造函数会逐个移动类的每个非静态成员。成员的移动是通过调用其移动构造函数完成的，<strong>如果成员没有移动构造函数，则会回退到使用拷贝构造函数</strong>。</p>
+<ul>
+<li>对基本数据类型成员，执行位拷贝。</li>
+<li>对类类型成员，调用其移动构造函数。如果成员类没有提供移动构造函数，将使用拷贝构造函数。</li>
+<li>对数组类型成员，逐个移动数组中的元素。</li>
+<li>对指针成员，移动指针值（地址），并将源对象的指针值设置为nullptr或其他合适的“空”值。</li>
+</ul>
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><ul>
+<li><strong>生成条件</strong>：如果类包含用户声明的拷贝构造函数、拷贝赋值操作符、移动赋值操作符、析构函数或移动构造函数，编译器不会自动生成默认移动构造函数。类似地，如果类定义了移动操作，编译器不会自动生成默认的拷贝构造函数。</li>
+<li><strong>性能</strong>：默认移动构造函数通常比默认拷贝构造函数更高效，因为它涉及到资源的转移而非复制。</li>
+<li><strong>用途</strong>：默认拷贝构造函数用于创建对象的精确副本，而默认移动构造函数用于资源的转移，这在临时对象被销毁或从函数返回对象时特别有用。</li>
+</ul>
+<p>理解默认构造函数的生成规则和它们如何影响类的行为是理解C++类设计的重要部分。在许多情况下，提供自定义的拷贝和移动构造函数可以更精确地控制对象的拷贝和移动，特别是在涉及资源管理的情况下。</p>
+<h2 id="拷贝构造函数的触发时机"><a href="#拷贝构造函数的触发时机" class="headerlink" title="拷贝构造函数的触发时机"></a>拷贝构造函数的触发时机</h2><ol>
+<li>当用类的一个对象初始化该类的另一个对象时</li>
+<li>如果函数的形参是类的对象，形参和实参结合时</li>
+<li>如果函数的返回值是类的对象,函数执行完成返回调用者时</li>
+<li>需要产生一个临时类对象时</li>
+</ol>
+<h1 id="改进写法总结"><a href="#改进写法总结" class="headerlink" title="改进写法总结"></a>改进写法总结</h1><p>这个故事告诉我们含有指针的自定义类需要注意深浅拷贝问题 <del>STL容器真神奇</del></p>
+<ul>
+<li><p>在拷贝/移动构造函数实现深拷贝</p>
+</li>
+<li><p>或者将<code>CInfo</code>类的指针成员设置为智能指针</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CInfo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">CInfo</span>(std::function&lt;std::<span class="built_in">shared_ptr</span>&lt;IPtr&gt;()&gt; vFunc)</span><br><span class="line">        : <span class="built_in">m_pBase</span>(<span class="built_in">vFunc</span>()) &#123; &#125;</span><br><span class="line">    ~<span class="built_in">CInfo</span>() = <span class="keyword">default</span>;</span><br><span class="line"></span><br><span class="line">    std::shared_ptr&lt;IPtr&gt; m_pBase;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//******************************************</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CInfoArray</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">registerInfo</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        m_InfoArray.<span class="built_in">emplace_back</span>(</span><br><span class="line">            [] &#123; <span class="keyword">return</span> std::<span class="built_in">make_shared</span>&lt;T&gt;(); &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnPrint</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; info : m_InfoArray)</span><br><span class="line">        &#123;</span><br><span class="line">            info.m_pBase-&gt;<span class="built_in">print</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::vector&lt;CInfo&gt; m_InfoArray;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>到这里，和指针相关的异常已经解决了，不过还有一些逻辑上的小细节可以改进</p>
+<blockquote>
+<p>逻辑上我需要将<code>CInfo</code>的成员指针指向<code>IPtr</code>的子类比如<code>CPtr1,CPtr2...</code>，并且我想实现只让<code>CInfo</code>类本身来管理自己指针<code>m_pBase</code>的创建和销毁</p>
+</blockquote>
+<p>这使得我使用模板来进行构造（将<code>CInfo</code>写成模板类就不能装在一个<code>std::vector</code>里了）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">registerTest</span><span class="params">(<span class="type">const</span> std::string&amp; vName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m_TestMenu.<span class="built_in">emplace_back</span>(vName, </span><br><span class="line">        [] &#123; <span class="keyword">return</span> std::<span class="built_in">make_shared</span>&lt;T&gt;(); &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么改进点1就是如何给不同的<code>IPtr</code>的子类传参，使用参数包，如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">registerTest</span><span class="params">(<span class="type">const</span> std::string&amp; vName, Args&amp;&amp;...args)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m_TestMenu.<span class="built_in">emplace_back</span>(vName, </span><br><span class="line">		[=] &#123;</span><br><span class="line">			<span class="keyword">return</span> std::<span class="built_in">make_shared</span>&lt;T&gt;(args...);</span><br><span class="line">		&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>未完待续…</strong></p>
+<hr>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/container/vector">https://en.cppreference.com/w/cpp/container/vector</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c++</a>
+          </div>
+
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
+    </div>
+  </div>
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/d30c71ec.html" rel="prev" title="运行时库">
+      <i class="fa fa-chevron-left"></i> 运行时库
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8D%95%E6%AD%A5%E8%B0%83%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">单步调试</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vector%E9%87%8D%E6%96%B0%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98%E7%9A%84%E9%94%85"><span class="nav-number">3.</span> <span class="nav-text">vector重新分配内存的锅</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%B7%E8%B4%9D-%E7%A7%BB%E5%8A%A8"><span class="nav-number">4.</span> <span class="nav-text">拷贝&#x2F;移动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%8B%B7%E8%B4%9D-%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">默认拷贝&#x2F;移动构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">默认拷贝构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">4.1.2.</span> <span class="nav-text">默认移动构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-number">4.1.3.</span> <span class="nav-text">区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%B7%E8%B4%9D%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E7%9A%84%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="nav-number">4.2.</span> <span class="nav-text">拷贝构造函数的触发时机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E5%86%99%E6%B3%95%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">改进写法总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">6.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Gagarin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Gagarin</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+
+  <span class="author" itemprop="copyrightHolder">Gagarin</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+  <script>
+  if (CONFIG.page.isPost) {
+    wpac_init = window.wpac_init || [];
+    wpac_init.push({
+      widget: 'Rating',
+      id    : ,
+      el    : 'wpac-rating',
+      color : 'fc6423'
+    });
+    (function() {
+      if ('WIDGETPACK_LOADED' in window) return;
+      WIDGETPACK_LOADED = true;
+      var mc = document.createElement('script');
+      mc.type = 'text/javascript';
+      mc.async = true;
+      mc.src = '//embed.widgetpack.com/widget.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+    })();
+  }
+  </script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ed2b454588e98f3e5ce6',
+      clientSecret: '2d61d10ac6df73896dbe860cfbf9584a7294c44c',
+      repo        : 'hexo_blog_comment_repo',
+      owner       : '0ctonaut',
+      admin       : ['0ctonaut'],
+      id          : '7f57b08b237056bd35df0c39be9e84e8',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
