@@ -20,15 +20,20 @@
     var CONFIG = {"hostname":"0ctonaut.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Yesterday">
-<meta property="og:url" content="https://0ctonaut.github.io/archives/2023/11/index.html">
+  <meta name="description" content="vector暗藏玄鸡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vector-bool刺客">
+<meta property="og:url" content="https://0ctonaut.github.io/posts/44bd8989.html">
 <meta property="og:site_name" content="Yesterday">
+<meta property="og:description" content="vector暗藏玄鸡">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-03-20T10:29:20.000Z">
+<meta property="article:modified_time" content="2024-03-20T06:36:34.349Z">
 <meta property="article:author" content="Gagarin">
+<meta property="article:tag" content="c++">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://0ctonaut.github.io/archives/2023/11/">
+<link rel="canonical" href="https://0ctonaut.github.io/posts/44bd8989.html">
 
 
 <script id="page-configurations">
@@ -36,12 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Archive | Yesterday</title>
+  <title>vector-bool刺客 | Yesterday</title>
   
 
 
@@ -175,56 +180,120 @@
         <div class="content-wrap">
           
 
-          <div class="content archive">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <span class="collection-header">Um..! 5 posts in total. Keep on posting.</span>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://0ctonaut.github.io/posts/44bd8989.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Gagarin">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yesterday">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          vector-bool刺客
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-03-20 10:29:20 / Modified: 06:36:34" itemprop="dateCreated datePublished" datetime="2024-03-20T10:29:20Z">2024-03-20</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <div class="post-description">vector<bool>暗藏玄鸡</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2023</span>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">bool</span>&gt; BoolVec = &#123; <span class="literal">false</span>, <span class="literal">true</span>, <span class="literal">false</span>, <span class="literal">false</span> &#125;;</span><br><span class="line"><span class="type">bool</span>&amp; b = BoolVec[<span class="number">1</span>]; <span class="comment">// error: initial value of reference to non-const must be an lvalue</span></span><br></pre></td></tr></table></figure>
+<p>这怎么回事呢？</p>
+<p>暂时没有实力来剖析原因，下文是对网络资料的摘抄，详见参考资料</p>
+<h1 id="std-vector-is-not-a-container"><a href="#std-vector-is-not-a-container" class="headerlink" title="std::vector is not a container"></a>std::vector<bool> is not a container</h1><blockquote>
+<p>Not all of the templates defined in the C++ Standard Library that look like containers actually are containers. In particular, the standard library requires a specialization of vector for bool, and the specialization <strong>std::vector<bool> is NOT a container</strong></p>
+</blockquote>
+<p><code>std::vector&lt;bool&gt;</code>是一个代理容器，也就是说它并不直接提供你它容纳的指针/引用，而是提供代理对象给你，你再通过代理对象间接访问。</p>
+<h2 id="Reason-optimization-for-space"><a href="#Reason-optimization-for-space" class="headerlink" title="Reason: optimization for space"></a>Reason: optimization for space</h2><p><code>sizeof(bool) &gt;= 1</code>, but Instead of storing a full char or int for every contained “bool”, it packs the bools and stores them as individual bits (inside, say, chars or ints) in its internal representation. </p>
+<blockquote>
+<p>The things inside aren’t even standard bools. A standard bool is at least as big as a char, so that it can be used “normally.” So, in fact, vector<bool> does not even really store bools, despite the name.</p>
+</blockquote>
+<p>后果：</p>
+<ul>
+<li>不能从<code>[]</code>或者迭代器获得<code>bool&amp;</code>，而是一个看起来像，而且行为也像<code>bool</code>的代理对象<code>vector&lt;bool&gt;::reference</code></li>
+<li>访问<code>vector&lt;bool&gt;</code>变慢，所以这是一种时间换空间的优化</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="http://www.gotw.ca/publications/mill09.htm">http://www.gotw.ca/publications/mill09.htm</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/8399417/why-vectorboolreference-doesnt-return-reference-to-bool#8399470">https://stackoverflow.com/questions/8399417/why-vectorboolreference-doesnt-return-reference-to-bool#8399470</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/25769882/getting-a-bool-reference-from-stdvectorbool">https://stackoverflow.com/questions/25769882/getting-a-bool-reference-from-stdvectorbool</a></li>
+</ul>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2023-11-26T20:13:43Z"
-              content="2023-11-26">
-          11-26
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c++</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/posts/49f26ea.html" itemprop="url">
-            <span itemprop="name">SSH入门</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-
+        
+  <div class="post-widgets">
+    <div class="wp_rating">
+      <div id="wpac-rating"></div>
     </div>
   </div>
-  
-  
-  
 
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/11f689c0.html" rel="prev" title="警惕含有指针的自定义类内存重新被分配">
+      <i class="fa fa-chevron-left"></i> 警惕含有指针的自定义类内存重新被分配
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
   
 
 
 
           </div>
           
+    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -271,6 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-vector-is-not-a-container"><span class="nav-number">2.</span> <span class="nav-text">std::vector is not a container</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reason-optimization-for-space"><span class="nav-number">2.1.</span> <span class="nav-text">Reason: optimization for space</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -444,6 +514,25 @@ if (document.querySelectorAll('pre.mermaid').length) {
 
   
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ed2b454588e98f3e5ce6',
+      clientSecret: '2d61d10ac6df73896dbe860cfbf9584a7294c44c',
+      repo        : 'hexo_blog_comment_repo',
+      owner       : '0ctonaut',
+      admin       : ['0ctonaut'],
+      id          : 'ee98e3fbfbf93653706a4e0608b2a3b6',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
 
 </body>
 </html>

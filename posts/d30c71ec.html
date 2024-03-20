@@ -28,7 +28,7 @@
 <meta property="og:description" content="visual studio 运行时库学习心得">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-12-28T09:50:30.000Z">
-<meta property="article:modified_time" content="2024-03-10T01:22:01.897Z">
+<meta property="article:modified_time" content="2024-03-20T02:08:08.397Z">
 <meta property="article:author" content="Gagarin">
 <meta property="article:tag" content="vs">
 <meta property="article:tag" content="c++">
@@ -218,7 +218,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-03-10 01:22:01" itemprop="dateModified" datetime="2024-03-10T01:22:01Z">2024-03-10</time>
+                <time title="Modified: 2024-03-20 02:08:08" itemprop="dateModified" datetime="2024-03-20T02:08:08Z">2024-03-20</time>
               </span>
 
           
@@ -246,7 +246,7 @@
 <p>环境：</p>
 <ul>
 <li>win11</li>
-<li>vs2022</li>
+<li>vs2022 v143</li>
 <li>Debug x64</li>
 </ul>
 <p>持续更新…</p>
@@ -261,8 +261,8 @@
 <hr>
 <p>再次查阅资料可得，</p>
 <blockquote>
-<p>在 EXE 采取 <code>/MT</code> 运行时库时，依赖的静态库 (x.lib) 的编译也必须是 MT。因为静态库的原因，EXE 只需要把自己需要的代码从静态库 (x.lib) 提取出来就行，不考虑静态库里的运行库。所以这种情况下 EXE 和静态库使用的运行时库是同一套代码，都是 EXE 的运行时库。</p>
-<p>在 EXE 采取 MT 运行时库时，依赖的动态库 (x.dll) 的编译也必须是 <code>/MT</code>。因为是动态库，EXE 在加载动态库时，是将其全部代码 (包括一份运行时库代码) 加载进了 EXE 进程空间，这样 EXE 在运行时就包含了<strong>两套运行时库代码</strong>，一个是动态库的，一个是 EXE 的。</p>
+<p>在 EXE 采取 <code>/MT</code> 运行时库时，依赖的静态库 (x.lib) 的编译也必须是 MT。因为静态库的原因，EXE 只需要把自己需要的代码从静态库 (x.lib) 提取出来就行，不考虑静态库里的运行库。所以这种情况下 EXE 和静态库使用的运行时库是同一套代码，都是 EXE 的运行时库；依赖的动态库 (x.dll) 的编译也必须是 <code>/MT</code>。因为是动态库，EXE 在加载动态库时，是将其全部代码 (包括一份运行时库代码) 加载进了 EXE 进程空间，这样 EXE 在运行时就包含了<strong>两套运行时库代码</strong>，一个是动态库的，一个是 EXE 的。</p>
+<p>在 EXE 采取 <code>/MD</code> 运行时库时，所依赖的无论是静态库还是动态库，都必须采用 <code>/MD</code> 来编译。这种情况下编译出来的 EXE 和 DLL（或 EXE 和 LIB）都依赖 MD 运行时库（即 VCRUNTIMExx.dll、MSVCPxx.dll、ucrtbase.dll）。因为都依赖 MD 运行时库，所以 EXE 和 DLL（或 EXE 和 LIB）用的是同一套运行时库。</p>
 </blockquote>
 <p>有以下三个变量在管理堆：</p>
 <ul>
@@ -318,8 +318,8 @@
       <i class="fa fa-chevron-left"></i> 制作nuget包
     </a></div>
       <div class="post-nav-item">
-    <a href="/posts/11f689c0.html" rel="next" title="含有指针的自定义类踩坑">
-      含有指针的自定义类踩坑 <i class="fa fa-chevron-right"></i>
+    <a href="/posts/11f689c0.html" rel="next" title="警惕含有指针的自定义类内存重新被分配">
+      警惕含有指针的自定义类内存重新被分配 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -396,7 +396,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
