@@ -19,24 +19,24 @@
   <meta name="author" content="Hotcat">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Intuition有这么一道题，判断一个字符串（模式串）是否为另一个字符串（主串）的子串，返回出现的索引。 朴素暴力的方法居然是0ms，但这并不代表写得好。 Knuth–Morris–Pratt对于字符串匹配算法，截至此题，我还不会KMP算法，借此学习一下 参考：  前缀函数与 KMP 算法 字符串匹配的KMP算法  最最朴素的匹配算法，将模式串与主串头部对齐，逐位比较，若中途比对失败，则将整个模">
+    <meta name="description" content="Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 Solution注意存一个索引minL，不要每次刷新结果字符串，差点MLE了，计算机真的太坏了 Sliding-Windo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode-28">
-<meta property="og:url" content="https://hotcat.work/posts/ee3825b1/">
+<meta property="og:title" content="leetcode-76">
+<meta property="og:url" content="https://hotcat.work/posts/74f7fcf3/">
 <meta property="og:site_name" content="Hotcat&#39;s blog">
-<meta property="og:description" content="Intuition有这么一道题，判断一个字符串（模式串）是否为另一个字符串（主串）的子串，返回出现的索引。 朴素暴力的方法居然是0ms，但这并不代表写得好。 Knuth–Morris–Pratt对于字符串匹配算法，截至此题，我还不会KMP算法，借此学习一下 参考：  前缀函数与 KMP 算法 字符串匹配的KMP算法  最最朴素的匹配算法，将模式串与主串头部对齐，逐位比较，若中途比对失败，则将整个模">
+<meta property="og:description" content="Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 Solution注意存一个索引minL，不要每次刷新结果字符串，差点MLE了，计算机真的太坏了 Sliding-Windo">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-07-23T13:53:55.150Z">
-<meta property="article:modified_time" content="2025-07-24T03:48:40.058Z">
+<meta property="article:published_time" content="2025-07-25T11:40:39.053Z">
+<meta property="article:modified_time" content="2025-07-25T12:16:19.336Z">
 <meta property="article:author" content="Hotcat">
-<meta property="article:tag" content="KMP">
+<meta property="article:tag" content="sliding-window">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>leetcode-28 - Hotcat&#39;s blog</title>
+  <title>leetcode-76 - Hotcat&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -226,7 +226,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="leetcode-28"></span>
+            <span id="subtitle" data-typed-text="leetcode-76"></span>
           
         </div>
 
@@ -237,8 +237,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-07-23 21:53" pubdate>
-          July 23, 2025 pm
+        <time datetime="2025-07-25 19:40" pubdate>
+          July 25, 2025 pm
         </time>
       </span>
     
@@ -249,7 +249,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          987 words
+          266 words
         
       </span>
     
@@ -260,7 +260,7 @@
         
         
         
-          9 mins
+          3 mins
         
       </span>
     
@@ -335,7 +335,7 @@
       
         <a href="/posts/ee3825b1/" title="leetcode-28"
            class="list-group-item list-group-item-action
-           active">
+           ">
           <span class="category-post">leetcode-28</span>
         </a>
       
@@ -380,7 +380,7 @@
       
         <a href="/posts/74f7fcf3/" title="leetcode-76"
            class="list-group-item list-group-item-action
-           ">
+           active">
           <span class="category-post">leetcode-76</span>
         </a>
       
@@ -403,43 +403,15 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">leetcode-28</h1>
+            <h1 id="seo-header">leetcode-76</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Intuition"><a href="#Intuition" class="headerlink" title="Intuition"></a>Intuition</h1><p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/description">有这么一道题</a>，判断一个字符串（模式串）是否为另一个字符串（主串）的子串，返回出现的索引。</p>
-<p>朴素暴力的方法居然是0ms，但这并不代表写得好。</p>
-<h1 id="Knuth–Morris–Pratt"><a href="#Knuth–Morris–Pratt" class="headerlink" title="Knuth–Morris–Pratt"></a>Knuth–Morris–Pratt</h1><p>对于字符串匹配算法，截至此题，我还不会KMP算法，借此学习一下</p>
-<p>参考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://oi-wiki.org/string/kmp/">前缀函数与 KMP 算法</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html">字符串匹配的KMP算法</a></li>
-</ul>
-<p>最最朴素的匹配算法，将模式串与主串头部对齐，逐位比较，若中途比对失败，则将整个模式串后移一位，重新从头开始逐位。那么其实比对失败之前遍历过的字符也是蕴含了信息的，需要一个空间换时间的方法来使用这些信息。</p>
-<p>在参考资料中，这些被naive算法忽略的信息可以用“前缀函数”（或者next数组）来表示，其定义为：<br>$$<br>\pi[i] &#x3D; max_{k&#x3D;0…i}{k:s[0…k-1]&#x3D;&#x3D;s[i-(k-1)…i]}<br>$$</p>
-<p>也就是 $\pi[i]$ 表示的是模式串的子串 $s[0…i]$ 最长相等的真前缀与真后缀的长度。它的意义是，如果字符串 $s$ 匹配到了某处索引 $i$ 发现不匹配了，但是之前的子串中有 $\pi[i-1] &gt; 0$ 也就是该后缀与前缀的某个位置匹配， 那就可以跳过后缀前缀之间的区域，直接将搜索词往后移动 $i - \pi[i-1]$ 位，并继续从当前索引开始比较。</p>
-<p>所以KMP算法的步骤是</p>
-<ul>
-<li>建表</li>
-<li>搜索</li>
-</ul>
-<p>接下来是建表算法，主要是解决了匹配失败后只能一格一格移动模式串的问题，可以直接得出模式串可以一步到位移动多远：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getPrefix</span><span class="hljs-params">(string s)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> n = (<span class="hljs-type">int</span>)s.<span class="hljs-built_in">length</span>();<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">pi</span><span class="hljs-params">(n)</span></span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; ++i)<br>    &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = i; j &gt;= <span class="hljs-number">0</span>; --j)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, j) == s.<span class="hljs-built_in">substr</span>(i - j + <span class="hljs-number">1</span>, j))<br>            &#123;<br>                pi[i] = j;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pi;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>以上是朴素的建表算法，复杂度$O(n^3)$，每次子串增长，内层循环 $j$ 都是从一位开始寻找相等的前后缀，这里可以优化。子串从 $s[0…i]$ 增长到 $s[0…i+1]$ 后，要么 $s[i+1] &#x3D;&#x3D; s[\pi[i] + 1]$，要么不等，所以:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getPrefix</span><span class="hljs-params">(string s)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> n = (<span class="hljs-type">int</span>)s.<span class="hljs-built_in">length</span>();<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">pi</span><span class="hljs-params">(n)</span></span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; ++i)<br>    &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = pi[i<span class="hljs-number">-1</span>] + <span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; --j)<br>        &#123;<br>            <span class="hljs-keyword">if</span> (s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, j) == s.<span class="hljs-built_in">substr</span>(i - j + <span class="hljs-number">1</span>, j))<br>            &#123;<br>                pi[i] = j;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> pi;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<p>网上找到了一个 $O(n)$ 的版本，本人水平有限暂时无法解释如何从上面想到这段代码，先贴在这里：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getNext</span><span class="hljs-params">(string s)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">next</span><span class="hljs-params">(s.size(), <span class="hljs-number">0</span>)</span></span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, j = <span class="hljs-number">0</span>; i &lt; s.<span class="hljs-built_in">size</span>(); ++i)<br>    &#123;<br>        <span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; s[i] != s[j])<br>            j = next[j - <span class="hljs-number">1</span>];<br>        j += (s[i] == s[j]);<br>        next[i] = j;<br>    &#125;<br>    <span class="hljs-keyword">return</span> next;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-<hr>
-<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getPrefix</span><span class="hljs-params">(string s)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-type">int</span> n = (<span class="hljs-type">int</span>)s.<span class="hljs-built_in">length</span>();<br>        <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">pi</span><span class="hljs-params">(n)</span></span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; ++i)<br>        &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = pi[i<span class="hljs-number">-1</span>] + <span class="hljs-number">1</span>; j &gt;= <span class="hljs-number">0</span>; --j)<br>            &#123;<br>                <span class="hljs-keyword">if</span> (s.<span class="hljs-built_in">substr</span>(<span class="hljs-number">0</span>, j) == s.<span class="hljs-built_in">substr</span>(i - j + <span class="hljs-number">1</span>, j))<br>                &#123;<br>                    pi[i] = j;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> pi;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(string haystack, string needle)</span> </span>&#123;<br>        <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br><br>        std::vector&lt;<span class="hljs-type">int</span>&gt; prefix = <span class="hljs-built_in">getPrefix</span>(needle);<br><br>        <span class="hljs-keyword">while</span>(i &lt; haystack.<span class="hljs-built_in">size</span>() &amp;&amp; j &lt; needle.<span class="hljs-built_in">size</span>())<br>        &#123;<br>            <span class="hljs-keyword">if</span>(haystack[i] != needle[j])<br>            &#123;<br>                <span class="hljs-keyword">if</span>(j &gt; <span class="hljs-number">0</span>)<br>                &#123;<br>                    j -= j - prefix[j<span class="hljs-number">-1</span>];<br>                &#125;<br>                <span class="hljs-keyword">else</span><br>                &#123;<br>                    ++i;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">else</span><br>            &#123;<br>                ++i;<br>                ++j;<br><br>                <span class="hljs-keyword">if</span>(j &gt;= needle.<span class="hljs-built_in">size</span>())<br>                &#123;<br>                    <span class="hljs-keyword">return</span> i - needle.<span class="hljs-built_in">size</span>();<br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<p>最终版</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">getNext</span><span class="hljs-params">(string s)</span></span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-type">int</span> n = s.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">next</span><span class="hljs-params">(n, <span class="hljs-number">0</span>)</span></span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>, j = <span class="hljs-number">0</span>; i &lt; n; ++i) &#123;<br>            <span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; s[i] != s[j])<br>                j = next[j - <span class="hljs-number">1</span>];<br><br>            j += (s[i] == s[j]);<br>            next[i] = j;<br>        &#125;<br>        <span class="hljs-keyword">return</span> next;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">strStr</span><span class="hljs-params">(string haystack, string needle)</span> </span>&#123;<br>        <span class="hljs-type">int</span> j = <span class="hljs-number">0</span>;<br>        std::vector&lt;<span class="hljs-type">int</span>&gt; next = <span class="hljs-built_in">getNext</span>(needle);<br><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; haystack.<span class="hljs-built_in">size</span>(); ++i)<br>        &#123;<br>            <span class="hljs-keyword">while</span> (j &gt; <span class="hljs-number">0</span> &amp;&amp; haystack[i] != needle[j])<br>                j = next[j - <span class="hljs-number">1</span>];<br><br>            j += (haystack[i] == needle[j]);<br>            <span class="hljs-keyword">if</span>(j &gt;= needle.<span class="hljs-built_in">size</span>())<br>            &#123;<br>                <span class="hljs-keyword">return</span> i - needle.<span class="hljs-built_in">size</span>() + <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-
-
+                <h1 id="Intuition"><a href="#Intuition" class="headerlink" title="Intuition"></a>Intuition</h1><p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/minimum-window-substring/description">有这么一道题</a>，给你一个字符串主串<code>s</code>和模式串<code>t</code>，问<code>s</code>有没有子串包含<code>t</code>中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由<code>t</code>中的所有字符构成，只需要包含。求满足该条件的最短子串。</p>
+<p>那我必然一上来先滑动窗口。</p>
+<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><p>注意存一个索引minL，不要每次刷新结果字符串，差点MLE了，计算机真的太坏了</p>
+<h2 id="Sliding-Window"><a href="#Sliding-Window" class="headerlink" title="Sliding-Window"></a>Sliding-Window</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">string <span class="hljs-title">minWindow</span><span class="hljs-params">(string s, string t)</span> </span>&#123;<br>        <span class="hljs-type">int</span> minLength = <span class="hljs-number">1e5</span> + <span class="hljs-number">2</span>;<br>        <span class="hljs-type">int</span> minL = <span class="hljs-number">0</span>;<br><br>        std::unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; strMap;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; t.<span class="hljs-built_in">size</span>(); ++i)<br>        &#123;<br>            strMap[t[i]]++;<br>        &#125;<br><br>        std::unordered_map&lt;<span class="hljs-type">char</span>, <span class="hljs-type">int</span>&gt; collectedMap;<br>        <span class="hljs-type">int</span> cnt = <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> l = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> r = <span class="hljs-number">0</span>; r &lt; s.<span class="hljs-built_in">size</span>(); ++r)<br>        &#123;<br>            <span class="hljs-type">char</span> newCha = s[r];<br>            <span class="hljs-keyword">if</span> (strMap[newCha] &gt; <span class="hljs-number">0</span>)<br>            &#123;<br>                <span class="hljs-keyword">if</span> (collectedMap[newCha] &lt; strMap[newCha])<br>                    ++cnt;<br>                ++collectedMap[newCha];<br><br>                <span class="hljs-keyword">while</span> (cnt &gt;= t.<span class="hljs-built_in">size</span>())<br>                &#123;<br>                    <span class="hljs-keyword">if</span> (r - l + <span class="hljs-number">1</span> &lt; minLength)<br>                    &#123;<br>                        minLength = r - l + <span class="hljs-number">1</span>;<br>                        minL = l;<br>                    &#125;<br>                    <span class="hljs-type">char</span> oldCha = s[l];<br>                    <span class="hljs-keyword">if</span> (strMap[oldCha] &gt; <span class="hljs-number">0</span>)<br>                    &#123;<br>                        <span class="hljs-keyword">if</span> (collectedMap[oldCha] &lt;= strMap[oldCha])<br>                        &#123;<br>                            --cnt;<br>                        &#125;<br>                        --collectedMap[oldCha];<br>                    &#125;<br>                    ++l;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> minLength &gt; <span class="hljs-number">1e5</span> + <span class="hljs-number">1</span> ? <span class="hljs-string">&quot;&quot;</span> : s.<span class="hljs-built_in">substr</span>(minL, minLength);<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -472,7 +444,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/KMP/" class="print-no-link">#KMP</a>
+        <a href="/tags/sliding-window/" class="print-no-link">#sliding-window</a>
       
     </div>
   
@@ -484,8 +456,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>leetcode-28</div>
-      <div>https://hotcat.work/posts/ee3825b1/</div>
+      <div>leetcode-76</div>
+      <div>https://hotcat.work/posts/74f7fcf3/</div>
     </div>
     <div class="license-meta">
       
@@ -497,7 +469,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>Posted on</div>
-          <div>July 23, 2025</div>
+          <div>July 25, 2025</div>
         </div>
       
       
