@@ -253,6 +253,67 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
+        <a href="/posts/b5d1488d/" target="_self">
+          leetcode-224
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/posts/b5d1488d/" target="_self">
+        <div>
+          Intuition有这么一道题，给你一个由整数、小括号、加减号、负号、空格组成的表达式字符串，求值。 第一直觉是分数字栈和符号栈将字符逐个入栈，碰到右半小括号再暂时出栈。出栈操作为取一个符号，取俩操作数，计算后将计算结果再塞入数字栈。最后的结果为栈顶——也是唯一的元素。 这样能解决除了负号外的问题，因为类似负号的单操作符不能直接取俩操作数。 Solution那么对于负号，我的想法是扫描字符串入栈的
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2025-07-26 09:24" pubdate>
+              2025-07-26
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/leetcode/" class="category-chain-item">leetcode</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/stack/">#stack</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
         <a href="/posts/74f7fcf3/" target="_self">
           leetcode-76
         </a>
@@ -261,7 +322,7 @@
       
       <a class="index-excerpt index-excerpt__noimg" href="/posts/74f7fcf3/" target="_self">
         <div>
-          Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 Solution注意存一个索引minL，不要每次刷新结果字符串，差点MLE了，计算机真的太坏了 Sliding-Windo
+          Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 SolutionSliding-Window因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上
         </div>
       </a>
 
