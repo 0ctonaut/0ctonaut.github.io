@@ -19,15 +19,15 @@
   <meta name="author" content="Hotcat">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 SolutionSliding-Window因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上">
+    <meta name="description" content="Analysis有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 SolutionSliding-Window因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上一">
 <meta property="og:type" content="article">
 <meta property="og:title" content="leetcode-76">
 <meta property="og:url" content="https://hotcat.work/posts/74f7fcf3/">
 <meta property="og:site_name" content="Hotcat&#39;s blog">
-<meta property="og:description" content="Intuition有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 SolutionSliding-Window因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上">
+<meta property="og:description" content="Analysis有这么一道题，给你一个字符串主串s和模式串t，问s有没有子串包含t中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由t中的所有字符构成，只需要包含。求满足该条件的最短子串。 那我必然一上来先滑动窗口。 SolutionSliding-Window因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上一">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-07-25T11:40:39.053Z">
-<meta property="article:modified_time" content="2025-07-25T14:48:03.864Z">
+<meta property="article:modified_time" content="2025-08-10T08:26:45.046Z">
 <meta property="article:author" content="Hotcat">
 <meta property="article:tag" content="sliding-window">
 <meta name="twitter:card" content="summary_large_image">
@@ -302,7 +302,7 @@
         aria-expanded="true"
       >
         leetcode
-        <span class="list-group-count">(9)</span>
+        <span class="list-group-count">(10)</span>
         <i class="iconfont icon-arrowright"></i>
       </a>
       
@@ -329,6 +329,15 @@
            class="list-group-item list-group-item-action
            ">
           <span class="category-post">leetcode-135</span>
+        </a>
+      
+    
+      
+      
+        <a href="/posts/4af2626a/" title="leetcode-167"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">leetcode-167</span>
         </a>
       
     
@@ -418,7 +427,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Intuition"><a href="#Intuition" class="headerlink" title="Intuition"></a>Intuition</h1><p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/minimum-window-substring/description">有这么一道题</a>，给你一个字符串主串<code>s</code>和模式串<code>t</code>，问<code>s</code>有没有子串包含<code>t</code>中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由<code>t</code>中的所有字符构成，只需要包含。求满足该条件的最短子串。</p>
+                <h1 id="Analysis"><a href="#Analysis" class="headerlink" title="Analysis"></a>Analysis</h1><p><a target="_blank" rel="noopener" href="https://leetcode.com/problems/minimum-window-substring/description">有这么一道题</a>，给你一个字符串主串<code>s</code>和模式串<code>t</code>，问<code>s</code>有没有子串包含<code>t</code>中所有字符，顺序无关，每个单词只能参与一次，所有单词都要用上。和leetcode-30的区别是不用正好完全由<code>t</code>中的所有字符构成，只需要包含。求满足该条件的最短子串。</p>
 <p>那我必然一上来先滑动窗口。</p>
 <h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><h2 id="Sliding-Window"><a href="#Sliding-Window" class="headerlink" title="Sliding-Window"></a>Sliding-Window</h2><p>因为写这题前刚写完leetcode-30，区别在于，这题允许容纳无关字符，而上一题需要完美包含所有单词，多一个少一个都不行，所以本题需要注意刷新最短字符串的条件。</p>
 <p>注意存一个索引minL，不要每次刷新结果字符串，差点MLE了，计算机真的太坏了</p>
