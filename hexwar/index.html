@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PaleGame · 六边形战棋</title>
+    <script type="module" crossorigin src="/hexwar/assets/index-DwK31a7l.js"></script>
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DPlSAOlt.css">
+  </head>
+  <body>
+    
+    <div id="app"></div>
+
+    
+    <div id="start">
+      <div class="start-inner">
+        <div class="brand">PaleGame</div>
+        <h1>六边形战场</h1>
+        <p class="lead">选一张地图开始。红蓝双方各四子，把对面打光就赢。</p>
+        
+        <div class="presets" id="presets"></div>
+        <p class="start-foot">
+          左键点棋子选人 · 右键拖拽转视角 · 滚轮缩放 · WASD 平移 · QE 旋转
+        </p>
+      </div>
+    </div>
+
+    
+    <div id="hud">
+      <div class="bar">
+        <div class="group">
+          <span class="turn" id="turn-badge">第 1 回合</span>
+          <span class="side-chip red"><i></i><span id="red-count">0</span></span>
+          <span class="side-chip blue"><i></i><span id="blue-count">0</span></span>
+        </div>
+        <div class="hint" id="hint">左键点选红方棋子</div>
+        <div class="group">
+          <button id="btn-home">选地图</button>
+          <button id="btn-restart">重开一局</button>
+          <button id="btn-end" class="primary">结束回合 <kbd>空格</kbd></button>
+        </div>
+      </div>
+    </div>
+
+    
+    <div id="banner" class="hidden">
+      <h2 id="banner-title">红方获胜</h2>
+      <p id="banner-sub">全部敌方棋子已被击溃</p>
+      <div class="banner-actions">
+        <button id="banner-change">换张地图</button>
+        <button id="banner-btn" class="primary">再来一局</button>
+      </div>
+    </div>
+
+    
+    <div id="palette" class="hidden">
+      <h4>地形笔刷</h4>
+      <div class="brushes" id="brushes"></div>
+      <h4>工具</h4>
+      <div class="tools" id="tools"></div>
+      <p class="tip">
+        <b>左键拖拽</b> 绘制 · <b>右键拖拽</b> 旋转 · <b>滚轮</b> 缩放<br />
+        加格笔刷点空地即可扩展地图 · 选择工具用于查看属性
+      </p>
+    </div>
+
+    
+    <div id="unitcard" class="hidden"></div>
+
+    
+    <div id="controls">
+      <span><b>右键拖拽</b> 旋转视角</span>
+      <span><b>滚轮</b> 缩放</span>
+      <span><b>WASD</b> 平移</span>
+      <span><b>Q/E</b> 转角度</span>
+    </div>
+
+    
+    <div id="floaters"></div>
+    <div id="toast"></div>
+
+  </body>
+</html>
