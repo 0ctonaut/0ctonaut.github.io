@@ -5,12 +5,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PaleGame · 六边形战棋</title>
-    <script type="module" crossorigin src="/hexwar/assets/index-DwK31a7l.js"></script>
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DPlSAOlt.css">
+    <script type="module" crossorigin src="/hexwar/assets/index-dR5CxHzF.js"></script>
+    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-CkhQxfub.js">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DZhd1WW9.css">
   </head>
   <body>
     
-    <div id="app"></div>
+    <div id="turn-flash" aria-live="polite"></div>
+
+<div id="main-menu" class="menu hidden">
+  <h1 class="menu-title">PALEGAME</h1>
+  <p class="menu-sub">石器时代</p>
+  <button id="menu-start" class="primary menu-btn">开始游戏</button>
+  <button id="menu-lang" class="menu-btn">语言：中文</button>
+  <button id="menu-mute" class="menu-btn">声音：开</button>
+  <label class="menu-volume">音量 <input id="menu-volume" type="range" min="0" max="100" step="1" /></label>
+</div>
+
+<div id="app"></div>
 
     
     <div id="start">
@@ -21,7 +33,7 @@
         
         <div class="presets" id="presets"></div>
         <p class="start-foot">
-          左键点棋子选人 · 右键拖拽转视角 · 滚轮缩放 · WASD 平移 · QE 旋转
+          左键点棋子选人 · 右键拖拽平移 · 滚轮缩放 · WASD 移动
         </p>
       </div>
     </div>
@@ -33,6 +45,7 @@
           <span class="turn" id="turn-badge">第 1 回合</span>
           <span class="side-chip red"><i></i><span id="red-count">0</span></span>
           <span class="side-chip blue"><i></i><span id="blue-count">0</span></span>
+          <span class="side-chip" title="金币"><i style="background: #f2c94c"></i><span id="gold-count">0</span></span>
         </div>
         <div class="hint" id="hint">左键点选红方棋子</div>
         <div class="group">
@@ -66,17 +79,25 @@
     </div>
 
     
+    <div id="actions" class="actions hidden"></div>
+
+    
     <div id="unitcard" class="hidden"></div>
 
     
     <div id="controls">
-      <span><b>右键拖拽</b> 旋转视角</span>
+      <span><b>右键拖拽</b> 平移视角</span>
       <span><b>滚轮</b> 缩放</span>
       <span><b>WASD</b> 平移</span>
-      <span><b>Q/E</b> 转角度</span>
+      <span>视角朝向固定</span>
     </div>
 
     
+    
+    <button id="seam-toggle" type="button" class="perf-toggle">接缝:平滑</button>
+    <button id="perf-toggle" type="button" class="perf-toggle">性能</button>
+    <div id="perf" class="perf hidden"></div>
+
     <div id="floaters"></div>
     <div id="toast"></div>
 
