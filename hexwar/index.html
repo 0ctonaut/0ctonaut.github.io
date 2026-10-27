@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PaleGame · 六边形战棋</title>
-    <script type="module" crossorigin src="/hexwar/assets/index-dR5CxHzF.js"></script>
-    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-CkhQxfub.js">
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DZhd1WW9.css">
+    <script type="module" crossorigin src="/hexwar/assets/index-QIIFFc5d.js"></script>
+    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-C1btBFJq.js">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DuBPFdpH.css">
   </head>
   <body>
     
@@ -29,7 +29,7 @@
       <div class="start-inner">
         <div class="brand">PaleGame</div>
         <h1>六边形战场</h1>
-        <p class="lead">选一张地图开始。红蓝双方各四子，把对面打光就赢。</p>
+        <p class="lead">先选世界布局，再选地表风貌。展开基地、发展生产，占领敌方基地获胜。</p>
         
         <div class="presets" id="presets"></div>
         <p class="start-foot">
@@ -39,22 +39,30 @@
     </div>
 
     
-    <div id="hud">
+    <header id="hud">
       <div class="bar">
-        <div class="group">
-          <span class="turn" id="turn-badge">第 1 回合</span>
-          <span class="side-chip red"><i></i><span id="red-count">0</span></span>
-          <span class="side-chip blue"><i></i><span id="blue-count">0</span></span>
-          <span class="side-chip" title="金币"><i style="background: #f2c94c"></i><span id="gold-count">0</span></span>
+        <div class="group resource-list" aria-label="玩家资源">
+          <button type="button" id="gold-resource" class="resource resource-gold" aria-label="金币，打开购买面板" title="金币 · 打开购买面板" data-purchase-trigger aria-controls="purchase-panel" aria-expanded="false">
+            <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14" rx="8.5" ry="7" fill="#b77b21"/><circle cx="12" cy="10.5" r="8.5" fill="#f2c94c"/><circle cx="12" cy="10.5" r="5.7" fill="none" stroke="#bc8a25" stroke-width="1.2"/><path d="M12 6.5v8M10 8h3.2M10 13h3.2" stroke="#fff0a4" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span id="gold-count" class="resource-value">0</span>
+          </button>
+          <span class="resource resource-crop" aria-label="农作物" title="农作物">
+            <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20C7 17 5 12 7 6c1-3 8-3 10 0 2 6 0 11-5 14Z" fill="#edbf47"/><path d="M10 6v10M14 6v10M8 8h8M8 12h8" stroke="#b98326" stroke-width=".9"/><path d="M12 22C5 20 2 15 3 10c5 1 8 5 9 12Z" fill="#5e9647"/><path d="M12 22c7-3 10-7 9-12-5 2-8 6-9 12Z" fill="#88b95b"/></svg>
+            <span id="crop-count" class="resource-value">0</span>
+          </span>
+          <span class="resource resource-mineral" aria-label="矿物" title="矿物">
+            <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 16 4-10 8-3 6 9-2 8H7Z" fill="#a5b0bd"/><path d="m7 6 5 7 3-10Z" fill="#d0d7df"/><path d="m12 13 9-1-2 8-7-2Z" fill="#6f7d8d"/><path d="m3 16 9-3v5l-5 2Z" fill="#8a97a7"/></svg>
+            <span id="mineral-count" class="resource-value">0</span>
+          </span>
         </div>
-        <div class="hint" id="hint">左键点选红方棋子</div>
-        <div class="group">
-          <button id="btn-home">选地图</button>
-          <button id="btn-restart">重开一局</button>
-          <button id="btn-end" class="primary">结束回合 <kbd>空格</kbd></button>
+        <div class="group hud-commands">
+          <span class="turn" id="turn-badge">Round 1</span>
+          <button id="btn-home" class="icon-button" aria-label="选地图"></button>
+          <button id="btn-restart" class="icon-button" aria-label="重开"></button>
+          <button id="btn-end" class="icon-button" aria-label="下一步"></button>
         </div>
       </div>
-    </div>
+    </header>
 
     
     <div id="banner" class="hidden">
@@ -79,23 +87,23 @@
     </div>
 
     
-    <div id="actions" class="actions hidden"></div>
+    <section id="selection-panel" class="selection-panel hidden" aria-label="选中对象详情">
+      <div id="unitcard" class="hidden"></div>
+      <div id="actions" class="actions hidden" aria-label="对象操作"></div>
+    </section>
+
+    <aside id="purchase-panel" class="purchase-panel" role="dialog" aria-modal="false" aria-labelledby="purchase-title" aria-hidden="true" tabindex="-1" inert>
+      <div class="purchase-header">
+        <div><h2 id="purchase-title">购买单位</h2><p>金币 <b id="purchase-balance">0</b></p></div>
+        <button id="purchase-close" type="button" class="icon-button" aria-label="收起购买面板"></button>
+      </div>
+      <p id="purchase-message" class="purchase-message"></p>
+      <div id="purchase-list" class="purchase-list"></div>
+    </aside>
 
     
-    <div id="unitcard" class="hidden"></div>
-
     
-    <div id="controls">
-      <span><b>右键拖拽</b> 平移视角</span>
-      <span><b>滚轮</b> 缩放</span>
-      <span><b>WASD</b> 平移</span>
-      <span>视角朝向固定</span>
-    </div>
-
-    
-    
-    <button id="seam-toggle" type="button" class="perf-toggle">接缝:平滑</button>
-    <button id="perf-toggle" type="button" class="perf-toggle">性能</button>
+    <button id="perf-toggle" type="button" class="perf-toggle" aria-controls="perf" aria-expanded="false">性能</button>
     <div id="perf" class="perf hidden"></div>
 
     <div id="floaters"></div>
