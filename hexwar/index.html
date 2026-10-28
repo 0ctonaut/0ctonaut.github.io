@@ -5,9 +5,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PaleGame · 六边形战棋</title>
-    <script type="module" crossorigin src="/hexwar/assets/index-QIIFFc5d.js"></script>
+    <script type="module" crossorigin src="/hexwar/assets/index-B1fdzgE6.js"></script>
     <link rel="modulepreload" crossorigin href="/hexwar/assets/three-C1btBFJq.js">
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DuBPFdpH.css">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-C8yoqgec.css">
   </head>
   <body>
     
@@ -46,7 +46,7 @@
             <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="14" rx="8.5" ry="7" fill="#b77b21"/><circle cx="12" cy="10.5" r="8.5" fill="#f2c94c"/><circle cx="12" cy="10.5" r="5.7" fill="none" stroke="#bc8a25" stroke-width="1.2"/><path d="M12 6.5v8M10 8h3.2M10 13h3.2" stroke="#fff0a4" stroke-width="1.5" stroke-linecap="round"/></svg>
             <span id="gold-count" class="resource-value">0</span>
           </button>
-          <span class="resource resource-crop" aria-label="农作物" title="农作物">
+          <span class="resource resource-crop" aria-label="食物" title="食物">
             <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20C7 17 5 12 7 6c1-3 8-3 10 0 2 6 0 11-5 14Z" fill="#edbf47"/><path d="M10 6v10M14 6v10M8 8h8M8 12h8" stroke="#b98326" stroke-width=".9"/><path d="M12 22C5 20 2 15 3 10c5 1 8 5 9 12Z" fill="#5e9647"/><path d="M12 22c7-3 10-7 9-12-5 2-8 6-9 12Z" fill="#88b95b"/></svg>
             <span id="crop-count" class="resource-value">0</span>
           </span>
@@ -54,8 +54,16 @@
             <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 16 4-10 8-3 6 9-2 8H7Z" fill="#a5b0bd"/><path d="m7 6 5 7 3-10Z" fill="#d0d7df"/><path d="m12 13 9-1-2 8-7-2Z" fill="#6f7d8d"/><path d="m3 16 9-3v5l-5 2Z" fill="#8a97a7"/></svg>
             <span id="mineral-count" class="resource-value">0</span>
           </span>
+        <span class="resource resource-oil" aria-label="石油" title="石油">
+          <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="12" rx="2" fill="#5b636e"/><path d="M8 9V5.5h8V9" fill="none" stroke="#8d97a3" stroke-width="1.6"/><circle cx="12" cy="15" r="3.4" fill="#2b3038"/><path d="M12 12v6M9 15h6" stroke="#c8d1dc" stroke-width="1.1"/><path d="M4 9h16" stroke="#e8eef5" stroke-width="1"/></svg>
+          <span id="oil-count" class="resource-value">0</span>
+        </span>
         </div>
         <div class="group hud-commands">
+          <button id="btn-era" class="era-button" type="button" aria-label="推进时代" title="推进时代">
+            <span id="era-name">石器时代</span>
+            <span id="era-progress">—</span>
+          </button>
           <span class="turn" id="turn-badge">Round 1</span>
           <button id="btn-home" class="icon-button" aria-label="选地图"></button>
           <button id="btn-restart" class="icon-button" aria-label="重开"></button>
@@ -63,6 +71,14 @@
         </div>
       </div>
     </header>
+
+    
+    <div id="era-banner" class="hidden" aria-live="polite">
+      <div class="era-banner-card">
+        <div class="era-banner-kicker">进入新时代</div>
+        <h2 id="era-banner-title">中古时代</h2>
+      </div>
+    </div>
 
     
     <div id="banner" class="hidden">
@@ -89,6 +105,22 @@
     
     <section id="selection-panel" class="selection-panel hidden" aria-label="选中对象详情">
       <div id="unitcard" class="hidden"></div>
+    
+    <div id="buy-bar" class="buy-bar" aria-label="生产单位">
+      <button type="button" class="buy-badge" id="buy-base" data-source="base" title="基地 · 经济单位">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 9v12h7v-6h4v6h7V9Z" fill="currentColor"/></svg>
+        <span class="buy-label">基地</span>
+      </button>
+      <button type="button" class="buy-badge" id="buy-barracks" data-source="barracks" title="兵营 · 作战单位">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V8l8-5 8 5v12h-5v-7H9v7Z" fill="currentColor"/></svg>
+        <span class="buy-label">兵营</span>
+      </button>
+      <button type="button" class="buy-badge" id="buy-factory" data-source="factory" title="工厂 · 车辆">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V10l5 3V10l5 3V6h8v15Z" fill="currentColor"/></svg>
+        <span class="buy-label">工厂</span>
+      </button>
+    </div>
+
       <div id="actions" class="actions hidden" aria-label="对象操作"></div>
     </section>
 
