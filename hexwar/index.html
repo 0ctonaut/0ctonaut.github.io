@@ -5,11 +5,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PaleGame · 六边形战棋</title>
-    <script type="module" crossorigin src="/hexwar/assets/index-B1fdzgE6.js"></script>
-    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-C1btBFJq.js">
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-C8yoqgec.css">
+    
+    <style>html,body{color:#dfe8f2;background:#0a1118;height:100%;margin:0}#main-menu.hidden,#start.hidden,#app.hidden{display:none}.resource-icon{width:18px;height:18px}#boot{z-index:9999;background:#0a1118;flex-direction:column;justify-content:center;align-items:center;gap:14px;font:14px/1.6 ui-monospace,Cascadia Mono,Consolas,monospace;transition:opacity .32s;display:flex;position:fixed;inset:0}#boot.done{opacity:0;pointer-events:none}#boot h2{letter-spacing:.26em;color:#cfe2f2;margin:0;font-size:26px;font-weight:600}#boot .sub{color:#6b8199;letter-spacing:.1em;font-size:12px}#boot .bar{background:#17222e;border-radius:2px;width:240px;height:4px;overflow:hidden}#boot .bar i{background:linear-gradient(90deg,#2f6f9e,#62c8e8);width:0;height:100%;animation:1.6s cubic-bezier(.22,.61,.36,1) forwards boot-ramp;display:block}@keyframes boot-ramp{0%{width:4%}to{width:90%}}#boot.done .bar i{animation:none;width:100%!important}#boot .hint{color:#4d6377;font-size:11px}</style>
+    <script type="module" crossorigin src="/hexwar/assets/index-BS9KqyD9.js"></script>
+    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-B_xNPa4X.js">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-Ba44dsFt.css">
   </head>
   <body>
+    
+    <div id="boot">
+      <h2>PALEGAME</h2>
+      <div class="sub">六边形战棋</div>
+      <div class="bar"><i></i></div>
+      <div class="hint">正在生成地形…</div>
+    </div>
+    
+    <script>
+      setTimeout(function () {
+        var b = document.getElementById('boot');
+        if (b) b.classList.add('done');
+      }, 10000);
+    </script>
     
     <div id="turn-flash" aria-live="polite"></div>
 
