@@ -7,9 +7,9 @@
     <title>PaleGame · 六边形战棋</title>
     
     <style>html,body{color:#dfe8f2;background:#0a1118;height:100%;margin:0}#main-menu.hidden,#start.hidden,#app.hidden{display:none}.resource-icon{width:18px;height:18px}#boot{z-index:9999;background:#0a1118;flex-direction:column;justify-content:center;align-items:center;gap:14px;font:14px/1.6 ui-monospace,Cascadia Mono,Consolas,monospace;transition:opacity .32s;display:flex;position:fixed;inset:0}#boot.done{opacity:0;pointer-events:none}#boot h2{letter-spacing:.26em;color:#cfe2f2;margin:0;font-size:26px;font-weight:600}#boot .sub{color:#6b8199;letter-spacing:.1em;font-size:12px}#boot .bar{background:#17222e;border-radius:2px;width:240px;height:4px;overflow:hidden}#boot .bar i{background:linear-gradient(90deg,#2f6f9e,#62c8e8);width:0;height:100%;animation:1.6s cubic-bezier(.22,.61,.36,1) forwards boot-ramp;display:block}@keyframes boot-ramp{0%{width:4%}to{width:90%}}#boot.done .bar i{animation:none;width:100%!important}#boot .hint{color:#4d6377;font-size:11px}</style>
-    <script type="module" crossorigin src="/hexwar/assets/index-BS9KqyD9.js"></script>
-    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-B_xNPa4X.js">
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-Ba44dsFt.css">
+    <script type="module" crossorigin src="/hexwar/assets/index-BnX9ZGII.js"></script>
+    <link rel="modulepreload" crossorigin href="/hexwar/assets/three-RqdIKEct.js">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DjO74q8Q.css">
   </head>
   <body>
     
@@ -74,12 +74,22 @@
           <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="9" width="16" height="12" rx="2" fill="#5b636e"/><path d="M8 9V5.5h8V9" fill="none" stroke="#8d97a3" stroke-width="1.6"/><circle cx="12" cy="15" r="3.4" fill="#2b3038"/><path d="M12 12v6M9 15h6" stroke="#c8d1dc" stroke-width="1.1"/><path d="M4 9h16" stroke="#e8eef5" stroke-width="1"/></svg>
           <span id="oil-count" class="resource-value">0</span>
         </span>
+        <span class="resource resource-coal" aria-label="煤" title="煤 · 采矿场与油井每回合烧 1 份">
+          <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 15 3-7 6-2 5 5-2 7H8Z" fill="#2f3439"/><path d="m8 8 4 5 3-7Z" fill="#4a525a"/><path d="m12 13 7-2-2 7-5-1Z" fill="#1d2126"/><path d="m5 15 7-2v5l-4 1Z" fill="#3b424a"/></svg>
+          <span id="coal-count" class="resource-value">0</span>
+        </span>
+        <span class="resource resource-uranium" aria-label="铀" title="铀 · 核电厂每回合消耗，核弹每次发射消耗 1">
+          <svg class="resource-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="4.6" fill="#8ce86b"/><circle cx="12" cy="13" r="2.2" fill="#d8ffc2"/><path d="M12 3.5v3M4.8 8.2l2.6 1.5M19.2 8.2l-2.6 1.5M6.5 19.5 9 17.4M17.5 19.5 15 17.4" stroke="#8ce86b" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="uranium-count" class="resource-value">0</span>
+        </span>
         </div>
         <div class="group hud-commands">
           <button id="btn-era" class="era-button" type="button" aria-label="推进时代" title="推进时代">
             <span id="era-name">石器时代</span>
             <span id="era-progress">—</span>
           </button>
+          <span class="turn" id="power-readout" title="电力：发电量 / 占用量（风、光按天气打折，核电吃铀）">⚡ 0</span>
+          <span class="turn" id="weather-readout" title="天气影响风力与太阳能出力">☀ 晴</span>
           <span class="turn" id="turn-badge">Round 1</span>
           <button id="btn-home" class="icon-button" aria-label="选地图"></button>
           <button id="btn-restart" class="icon-button" aria-label="重开"></button>
