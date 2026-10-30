@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-30T05:33:43+08:00",
+  "generatedAt": "2026-10-30T09:35:08+08:00",
   "indices": [
     {
       "id": "ndx",
@@ -9,7 +9,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5ENDX/",
-      "attemptedAt": "2026-10-30T05:33:43+08:00",
+      "attemptedAt": "2026-10-30T09:35:08+08:00",
       "status": "ok",
       "bars": [
         {
@@ -1063,7 +1063,7 @@
           "close": 29402.5078125
         }
       ],
-      "fetchedAt": "2026-10-30T05:33:43+08:00",
+      "fetchedAt": "2026-10-30T09:35:08+08:00",
       "asOf": "2026-10-29"
     },
     {
@@ -1073,7 +1073,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5EGSPC/",
-      "attemptedAt": "2026-10-30T05:33:43+08:00",
+      "attemptedAt": "2026-10-30T09:35:08+08:00",
       "status": "ok",
       "bars": [
         {
@@ -2127,7 +2127,7 @@
           "close": 7720.39013671875
         }
       ],
-      "fetchedAt": "2026-10-30T05:33:43+08:00",
+      "fetchedAt": "2026-10-30T09:35:08+08:00",
       "asOf": "2026-10-29"
     },
     {
@@ -2137,16 +2137,9 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000300/zs",
-      "attemptedAt": "2026-10-30T05:33:43+08:00",
+      "attemptedAt": "2026-10-30T09:35:08+08:00",
       "status": "ok",
       "bars": [
-        {
-          "date": "2026-03-19",
-          "open": 4611.44,
-          "close": 4583.25,
-          "high": 4634.55,
-          "low": 4570.39
-        },
         {
           "date": "2026-03-20",
           "open": 4602.82,
@@ -3189,10 +3182,17 @@
           "close": 4041.84,
           "high": 4075.47,
           "low": 4030.23
+        },
+        {
+          "date": "2026-10-30",
+          "open": 3985.24,
+          "close": 3994.69,
+          "high": 3995.92,
+          "low": 3968.86
         }
       ],
-      "fetchedAt": "2026-10-30T05:33:43+08:00",
-      "asOf": "2026-10-29"
+      "fetchedAt": "2026-10-30T09:35:08+08:00",
+      "asOf": "2026-10-30"
     },
     {
       "id": "csi500",
@@ -3201,16 +3201,9 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000905/zs",
-      "attemptedAt": "2026-10-30T05:33:43+08:00",
+      "attemptedAt": "2026-10-30T09:35:08+08:00",
       "status": "ok",
       "bars": [
-        {
-          "date": "2026-03-19",
-          "open": 7975.85,
-          "close": 7877.09,
-          "high": 8000.43,
-          "low": 7844.15
-        },
         {
           "date": "2026-03-20",
           "open": 7913.49,
@@ -4253,10 +4246,17 @@
           "close": 6453.72,
           "high": 6604.65,
           "low": 6450.54
+        },
+        {
+          "date": "2026-10-30",
+          "open": 6318.16,
+          "close": 6351.7,
+          "high": 6356.05,
+          "low": 6311.1
         }
       ],
-      "fetchedAt": "2026-10-30T05:33:43+08:00",
-      "asOf": "2026-10-29"
+      "fetchedAt": "2026-10-30T09:35:08+08:00",
+      "asOf": "2026-10-30"
     }
   ]
 }
