@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-03T01:51:27+08:00",
+  "generatedAt": "2026-11-03T08:34:59+08:00",
   "indices": [
     {
       "id": "ndx",
@@ -9,7 +9,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5ENDX/",
-      "attemptedAt": "2026-11-03T01:51:27+08:00",
+      "attemptedAt": "2026-11-03T08:34:59+08:00",
       "status": "ok",
       "bars": [
         {
@@ -1059,11 +1059,11 @@
           "date": "2026-11-02",
           "open": 28561.166015625,
           "high": 28753.392578125,
-          "low": 28344.638671875,
-          "close": 28427.900390625
+          "low": 27967.44140625,
+          "close": 27989.8203125
         }
       ],
-      "fetchedAt": "2026-11-03T01:51:27+08:00",
+      "fetchedAt": "2026-11-03T08:34:59+08:00",
       "asOf": "2026-11-02"
     },
     {
@@ -1073,7 +1073,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5EGSPC/",
-      "attemptedAt": "2026-11-03T01:51:27+08:00",
+      "attemptedAt": "2026-11-03T08:34:59+08:00",
       "status": "ok",
       "bars": [
         {
@@ -2123,11 +2123,11 @@
           "date": "2026-11-02",
           "open": 7610.830078125,
           "high": 7662.22998046875,
-          "low": 7592.64013671875,
-          "close": 7606.990234375
+          "low": 7539.3798828125,
+          "close": 7541.39990234375
         }
       ],
-      "fetchedAt": "2026-11-03T01:51:27+08:00",
+      "fetchedAt": "2026-11-03T08:34:59+08:00",
       "asOf": "2026-11-02"
     },
     {
@@ -2137,7 +2137,7 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000300/zs",
-      "attemptedAt": "2026-11-03T01:51:27+08:00",
+      "attemptedAt": "2026-11-03T08:34:59+08:00",
       "status": "ok",
       "bars": [
         {
@@ -3191,7 +3191,7 @@
           "low": 3988.17
         }
       ],
-      "fetchedAt": "2026-11-03T01:51:27+08:00",
+      "fetchedAt": "2026-11-03T08:34:59+08:00",
       "asOf": "2026-11-02"
     },
     {
@@ -3201,7 +3201,7 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000905/zs",
-      "attemptedAt": "2026-11-03T01:51:27+08:00",
+      "attemptedAt": "2026-11-03T08:34:59+08:00",
       "status": "ok",
       "bars": [
         {
@@ -4255,7 +4255,7 @@
           "low": 6253.79
         }
       ],
-      "fetchedAt": "2026-11-03T01:51:27+08:00",
+      "fetchedAt": "2026-11-03T08:34:59+08:00",
       "asOf": "2026-11-02"
     }
   ]
