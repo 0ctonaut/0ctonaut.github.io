@@ -7,9 +7,9 @@
     <title>PaleGame · 六边形战棋</title>
     
     <style>html,body{color:#dfe8f2;background:#0a1118;height:100%;margin:0}#main-menu.hidden,#start.hidden,#app.hidden{display:none}.resource-icon{width:18px;height:18px}#boot{z-index:9999;background:#0a1118;flex-direction:column;justify-content:center;align-items:center;gap:14px;font:14px/1.6 ui-monospace,Cascadia Mono,Consolas,monospace;transition:opacity .32s;display:flex;position:fixed;inset:0}#boot.done{opacity:0;pointer-events:none}#boot h2{letter-spacing:.26em;color:#cfe2f2;margin:0;font-size:26px;font-weight:600}#boot .sub{color:#6b8199;letter-spacing:.1em;font-size:12px}#boot .bar{background:#17222e;border-radius:2px;width:240px;height:4px;overflow:hidden}#boot .bar i{background:linear-gradient(90deg,#2f6f9e,#62c8e8);width:0;height:100%;animation:1.6s cubic-bezier(.22,.61,.36,1) forwards boot-ramp;display:block}@keyframes boot-ramp{0%{width:4%}to{width:90%}}#boot.done .bar i{animation:none;width:100%!important}#boot .hint{color:#4d6377;font-size:11px}</style>
-    <script type="module" crossorigin src="/hexwar/assets/index-BnX9ZGII.js"></script>
+    <script type="module" crossorigin src="/hexwar/assets/index-BFKKKjnP.js"></script>
     <link rel="modulepreload" crossorigin href="/hexwar/assets/three-RqdIKEct.js">
-    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-DjO74q8Q.css">
+    <link rel="stylesheet" crossorigin href="/hexwar/assets/index-BQY93jWF.css">
   </head>
   <body>
     
@@ -32,9 +32,11 @@
 <div id="main-menu" class="menu hidden">
   <h1 class="menu-title">PALEGAME</h1>
   <p class="menu-sub">石器时代</p>
+  <button id="menu-continue" class="menu-btn hidden">继续上一局</button>
   <button id="menu-start" class="primary menu-btn">开始游戏</button>
   <button id="menu-lang" class="menu-btn">语言：中文</button>
   <button id="menu-mute" class="menu-btn">声音：开</button>
+  <button id="menu-speed" class="menu-btn">动画速度：1×</button>
   <label class="menu-volume">音量 <input id="menu-volume" type="range" min="0" max="100" step="1" /></label>
 </div>
 
@@ -46,10 +48,21 @@
         <div class="brand">PaleGame</div>
         <h1>六边形战场</h1>
         <p class="lead">先选世界布局，再选地表风貌。展开基地、发展生产，占领敌方基地获胜。</p>
+        <p class="last-result hidden" id="last-result"></p>
         
+        <button type="button" id="start-random" class="random-btn">🎲 随便来一张（随机布局 + 地貌）</button>
+        
+        
+        <div class="map-preview-wrap">
+          <canvas id="map-preview" width="360" height="200" aria-label="地图预览"></canvas>
+          <p class="map-preview-hint" id="map-preview-hint"></p>
+        </div>
         <div class="presets" id="presets"></div>
         <p class="start-foot">
           左键点棋子选人 · 右键拖拽平移 · 滚轮缩放 · WASD 移动
+          <br />
+          
+          任何时候按 <b>?</b> 打开<b>玩法速查</b>（规则 / 单位职责 / 快捷键）
         </p>
       </div>
     </div>
@@ -90,7 +103,12 @@
           </button>
           <span class="turn" id="power-readout" title="电力：发电量 / 占用量（风、光按天气打折，核电吃铀）">⚡ 0</span>
           <span class="turn" id="weather-readout" title="天气影响风力与太阳能出力">☀ 晴</span>
+          
+          <span class="turn hidden" id="production-readout" title="正在制造的单位（每座生产建筑一次一条产线）"></span>
           <span class="turn" id="turn-badge">Round 1</span>
+          <button id="btn-undo" class="icon-button" aria-label="撤销上一步" title="撤销上一步（Ctrl+Z）" disabled></button>
+          <button id="btn-speed" class="icon-button" aria-label="播放速度 2×" title="播放速度（点击切换 1× / 2× / 4×）">2×</button>
+          <button id="btn-help" class="icon-button" aria-label="玩法速查" title="玩法速查（? 键）">?</button>
           <button id="btn-home" class="icon-button" aria-label="选地图"></button>
           <button id="btn-restart" class="icon-button" aria-label="重开"></button>
           <button id="btn-end" class="icon-button" aria-label="下一步"></button>
@@ -109,10 +127,64 @@
     
     <div id="banner" class="hidden">
       <h2 id="banner-title">红方获胜</h2>
-      <p id="banner-sub">全部敌方棋子已被击溃</p>
+      
+      <p id="banner-sub">占领敌方全部基地即获胜</p>
       <div class="banner-actions">
         <button id="banner-change">换张地图</button>
         <button id="banner-btn" class="primary">再来一局</button>
+      </div>
+    </div>
+
+    
+    <div id="help" class="help hidden" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <div class="help-card">
+        <div class="help-head">
+          <h2 id="help-title">玩法速查</h2>
+          <button id="help-close" type="button" class="icon-button" aria-label="关闭玩法速查"></button>
+        </div>
+        <div class="help-body">
+          <section>
+            <h3>怎么赢</h3>
+            <p>先把敌方基地的<b>耐久打到 0</b>，再让<b>作战单位</b>走进它的占领范围就能占领（工程师/农夫不参与基地交互）。
+               占掉敌方<b>全部基地</b>即获胜 —— 没有回合上限，也没有别的胜利条件。</p>
+            <p><b>不知道下一步做什么？</b>看左上角的目标线 —— 它会按顺序教你（展开基地 → 采矿 → 建兵营 → 出兵 →
+               推时代 → 打空基地 → 占领）。<b>点一下目标线</b>，镜头会带你去看该看的东西。</p>
+          </section>
+          <section>
+            <h3>三种资源</h3>
+            <p><b>金币</b>造兵、<b>矿物</b>造建筑与推时代、<b>口粮</b>养兵（不够就扣行动力）。<b>金币不能换口粮</b> —— 只能靠农夫去采集。</p>
+          </section>
+          <section>
+            <h3>移动与攻击各一次</h3>
+            <p>一个单位每回合可以<b>移动一次 + 攻击一次</b>，两者互不消耗（先走近再打是标准打法）。
+               点选单位可以看到它还能不能动、能不能打；不能移动时卡片会写明原因。</p>
+            <p>点地图上的高亮格就是移动；<b>点一个差一点点够不到的空地</b>，单位会朝那个方向走到最远处
+               （点很远的地方仍然只是取消选中）。</p>
+          </section>
+          <section>
+            <h3>谁干什么</h3>
+            <p><b>农夫</b>采集资源格（站在资源上点采集）· <b>工程师</b>建建筑、修建筑、抢敌方矿场 ·
+               <b>医疗兵</b>治疗 · 其余是作战单位（拆建筑、把基地打空、占领基地都要靠它们）。</p>
+          </section>
+          <section>
+            <h3>建筑</h3>
+            <p>基地出经济单位 · 兵营出作战单位 · 工厂出车辆 · 造船厂出水军。基地每升一级解锁更高时代，时代越高，新兵越强。</p>
+          </section>
+          <section>
+            <h3>后期大杀器</h3>
+            <p><b>发射井</b>建好自带一枚核弹（打基地最划算）· <b>天气控制器</b>召来一片会自己落雷的雷暴。两者都能被拆掉，也都能打敌方基地。</p>
+          </section>
+          <section>
+            <h3>关掉页面也不会丢</h3>
+            <p>对局中每 <b id="help-save-interval">1.5 秒</b><b>自动存档</b>一次。关掉标签页后重新打开，主菜单会出现
+               <b>「继续上一局」</b>，点它就能接着打（打完一局会清档）。</p>
+          </section>
+          <section>
+            <h3>快捷键</h3>
+            <p><b>空格</b> 下一步 · <b>1~9</b> 触发行动条上对应的按钮 · <b>Ctrl+Z</b> 撤销上一步（本回合内） · <b>Esc</b> 取消选中 ·
+               <b>?</b> 打开/关闭这一页 · 左键点选、右键拖拽旋转、滚轮缩放。</p>
+          </section>
+        </div>
       </div>
     </div>
 
@@ -131,6 +203,9 @@
     
     <section id="selection-panel" class="selection-panel hidden" aria-label="选中对象详情">
       <div id="unitcard" class="hidden"></div>
+      <div id="actions" class="actions hidden" aria-label="对象操作"></div>
+    </section>
+
     
     <div id="buy-bar" class="buy-bar" aria-label="生产单位">
       <button type="button" class="buy-badge" id="buy-base" data-source="base" title="基地 · 经济单位">
@@ -147,9 +222,6 @@
       </button>
     </div>
 
-      <div id="actions" class="actions hidden" aria-label="对象操作"></div>
-    </section>
-
     <aside id="purchase-panel" class="purchase-panel" role="dialog" aria-modal="false" aria-labelledby="purchase-title" aria-hidden="true" tabindex="-1" inert>
       <div class="purchase-header">
         <div><h2 id="purchase-title">购买单位</h2><p>金币 <b id="purchase-balance">0</b></p></div>
@@ -161,6 +233,10 @@
 
     
     
+    
+    <canvas id="minimap" class="minimap hidden" width="176" height="112" aria-label="小地图"></canvas>
+    
+    <canvas id="minimap-view" class="minimap minimap-view hidden" width="176" height="112" aria-hidden="true"></canvas>
     <button id="perf-toggle" type="button" class="perf-toggle" aria-controls="perf" aria-expanded="false">性能</button>
     <div id="perf" class="perf hidden"></div>
 
