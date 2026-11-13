@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-14T01:32:04+08:00",
+  "generatedAt": "2026-11-14T07:16:58+08:00",
   "indices": [
     {
       "id": "ndx",
@@ -9,7 +9,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5ENDX/",
-      "attemptedAt": "2026-11-14T01:32:04+08:00",
+      "attemptedAt": "2026-11-14T07:16:58+08:00",
       "status": "ok",
       "bars": [
         {
@@ -1060,10 +1060,10 @@
           "open": 28265.537109375,
           "high": 28295.798828125,
           "low": 27609.712890625,
-          "close": 27814.208984375
+          "close": 27943.736328125
         }
       ],
-      "fetchedAt": "2026-11-14T01:32:04+08:00",
+      "fetchedAt": "2026-11-14T07:16:58+08:00",
       "asOf": "2026-11-13"
     },
     {
@@ -1073,7 +1073,7 @@
       "market": "US",
       "source": "Yahoo Finance",
       "sourceUrl": "https://finance.yahoo.com/quote/%5EGSPC/",
-      "attemptedAt": "2026-11-14T01:32:04+08:00",
+      "attemptedAt": "2026-11-14T07:16:58+08:00",
       "status": "ok",
       "bars": [
         {
@@ -2124,10 +2124,10 @@
           "open": 7616.85009765625,
           "high": 7621.77978515625,
           "low": 7499.39990234375,
-          "close": 7535.81005859375
+          "close": 7561.669921875
         }
       ],
-      "fetchedAt": "2026-11-14T01:32:04+08:00",
+      "fetchedAt": "2026-11-14T07:16:58+08:00",
       "asOf": "2026-11-13"
     },
     {
@@ -2137,7 +2137,7 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000300/zs",
-      "attemptedAt": "2026-11-14T01:32:04+08:00",
+      "attemptedAt": "2026-11-14T07:16:58+08:00",
       "status": "ok",
       "bars": [
         {
@@ -3191,7 +3191,7 @@
           "low": 4004.5
         }
       ],
-      "fetchedAt": "2026-11-14T01:32:04+08:00",
+      "fetchedAt": "2026-11-14T07:16:58+08:00",
       "asOf": "2026-11-13"
     },
     {
@@ -3201,7 +3201,7 @@
       "market": "CN",
       "source": "腾讯证券",
       "sourceUrl": "https://gu.qq.com/sh000905/zs",
-      "attemptedAt": "2026-11-14T01:32:04+08:00",
+      "attemptedAt": "2026-11-14T07:16:58+08:00",
       "status": "ok",
       "bars": [
         {
@@ -4255,7 +4255,7 @@
           "low": 6449.34
         }
       ],
-      "fetchedAt": "2026-11-14T01:32:04+08:00",
+      "fetchedAt": "2026-11-14T07:16:58+08:00",
       "asOf": "2026-11-13"
     }
   ]
